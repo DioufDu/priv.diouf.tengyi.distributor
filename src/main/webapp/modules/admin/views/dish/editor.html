@@ -1,0 +1,307 @@
+<!-- --------------------------------- Header ---------------------------------- -->
+<div ng-include="'modules/admin/components/header.html'"></div>
+<!-- --------------------------------- Menu ---------------------------------- -->
+<div ng-include="'modules/admin/components/menu.html'"></div>
+<section class="am-container" style="padding: 0px; margin: 0px;">
+	<!-- ----------------------------------- Dish Image -------------------------------- -->
+	<div class="am-u-lg-5 am-animation-slide-left" style="padding: 0px; margin: 0px;" ng-cloak>
+		<ul class="am-gallery am-avg-sm-1 am-avg-md-1 am-avg-lg-1 am-gallery-bordered" style="padding: 0px; margin: 0px;"
+			data-am-widget="gallery" data-am-gallery="{ pureview: true }">
+			<li>
+				<div class="am-gallery-item">
+					<!-- Dish Photo -->
+					<img ng-src="{{dish.photo.standardPhotoId ? (dish.photo.standardPhotoUrl + '/rotate/' + dish.photo.angle) : ''}}"
+						data-rel="{{dish.photo.fullScreenPhotoUrl}}/rotate/{{dish.photo.angle}}" alt="{{dish.name}}"
+						ng-show="dish.photo.standardPhotoId" />
+					<!-- Notification for empty photo -->
+					<div class="am-text-center" ng-show="dish.photo.standardPhotoId === null">
+						<hr>
+						<strong class="am-text-xxxl">No Dish Meal</strong>
+						<hr>
+					</div>
+					<div class="am-gallery-title">
+						<!-- Dish Name & Line -->
+						<div class="am-u-sm-12 am-u-md-12 am-u-lg-12 am-text-lg"
+							ng-class="::dish.isRecommended === true ? 'am-text-warning' : ''">
+							<div class="am-u-sm-12 am-text-sm">
+								<div class="am-block" ng-class="dish.isRecommended === true ? 'am-text-warning' : ''">
+									<i class="am-icon-thumbs-up" ng-show="::dish.isRecommended"></i>
+									<strong ng-bind="::dish.chineseName"></strong>
+									<small class="am-badge am-badge-success am-fr">
+										Line:
+										<span ng-bind="::dish.line"> </span>
+									</small>
+									<br>
+									<strong ng-bind="::dish.englishName"></strong>
+									<small class="am-badge am-badge-primary am-fr">
+										<span ng-bind="::dish.formattedOfferDate"></span>
+									</small>
+								</div>
+							</div>
+						</div>
+						<!-- Dish Photo Editor -->
+						<div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+							<hr>
+							<div class="am-btn-toolbar">
+								<div class="am-btn-group am-btn-group-lg am-btn-group-justify">
+									<button class="am-btn am-btn-secondary" ng-click="photo.rotate(-90)">
+										<i class="am-icon-rotate-left"></i>
+									</button>
+									<button class="am-btn am-btn-secondary" ng-click="photo.change()">
+										<i class="am-icon-upload"></i>
+									</button>
+									<button class="am-btn am-btn-secondary" ng-click="photo.rotate(90)">
+										<i class="am-icon-rotate-right"></i>
+									</button>
+								</div>
+							</div>
+							<form id="frm-photo-editor" class="am-hide" enctype="multipart/form-data"
+								onchange="angular.element(this).scope().photo.upload(this)" role="form">
+								<div>
+									<!-- Photo File -->
+									<input id="btn-upload-photo" name="photo" value="Change" type="file">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<!-- ----------------------------------- Dish Info -------------------------------- -->
+	<div class="am-u-lg-7 am-animation-slide-right" style="padding: 0px; margin: 0px;" ng-cloak>
+		<form name="formDish" class="am-form am-form-horizontal" style="padding: 0px; margin: 0px;" novalidate>
+			<div data-am-tabs class="am-tabs am-tabs-default">
+				<ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify">
+					<li class="am-active">
+						<a href="javascript: void(0)">
+							<span class="am-text-xs">General</span>
+						</a>
+					</li>
+					<li>
+						<a href="javascript: void(0)">
+							<span class="am-text-xs">Description</span>
+						</a>
+					</li>
+					<li>
+						<a href="javascript: void(0)">
+							<span class="am-text-xs">
+								Rate
+								<span class="am-badge am-badge-secondary am-round" ng-bind="dish.rate.overall"></span>
+							</span>
+						</a>
+					</li>
+				</ul>
+				<div class="am-tabs-bd">
+					<div class="am-tab-panel am-active">
+						<fieldset>
+							<hr>
+							<div class="am-form-group am-form-group-sm">
+								<label class="am-form-label am-u-sm-12 am-u-md-4 am-u-lg-3">Date:</label>
+								<div class="am-u-sm-12 am-u-md-8 am-u-lg-9">
+									<input id="ipt-dish-offer-date" class="am-form-field" id="ipt-dish-offer-date" placeholder="Date"
+										data-am-datepicker="{format: 'yyyy-mm-dd'}" readonly ng-model="::dish.formattedOfferDate" />
+								</div>
+							</div>
+							<div class="am-form-group am-form-group-sm am-form-icon am-form-feedback"
+								ng-class="!formDish.line.$dirty ? '' : formDish.line.$valid ? 'am-form-success' : 'am-form-error'">
+								<label class="am-form-label am-u-sm-12 am-u-md-4 am-u-lg-3">Line:</label>
+								<div class="am-u-sm-12 am-u-md-8 am-u-lg-9">
+									<input class="am-form-field" name="line" ng-model="dish.line" placeholder="Line" required>
+									<!-- Validation - Valid -->
+									<span class="am-icon-check" ng-show="formDish.line.$dirty && formDish.line.$valid"></span>
+									<!-- Validation - Invalid -->
+									<span class="am-icon-remove" ng-show="formDish.line.$dirty && formDish.line.$invalid"></span>
+								</div>
+							</div>
+							<div class="am-form-group am-form-group-sm am-form-icon am-form-feedback"
+								ng-class="!formDish.chineseName.$dirty ? '' : formDish.chineseName.$valid ? 'am-form-success' : 'am-form-error'">
+								<label class="am-form-label am-u-sm-12 am-u-md-4 am-u-lg-3">Name(CN):</label>
+								<div class="am-u-sm-12 am-u-md-8 am-u-lg-9">
+									<input class="am-form-field" name="chineseName" ng-model="dish.chineseName" placeholder="Chinese Name" required>
+									<!-- Validation - Valid -->
+									<i class="am-icon-check" ng-show="formDish.chineseName.$dirty && formDish.chineseName.$valid"></i>
+									<!-- Validation - Invalid -->
+									<i class="am-icon-remove" ng-show="formDish.chineseName.$dirty && formDish.chineseName.$invalid"></i>
+								</div>
+							</div>
+							<div class="am-form-group am-form-group-sm am-form-icon am-form-feedback"
+								ng-class="!formDish.englishName.$dirty ? '' : formDish.englishName.$valid ? 'am-form-success' : 'am-form-error'">
+								<label class="am-form-label am-u-sm-12 am-u-md-4 am-u-lg-3">Name(EN):</label>
+								<div class="am-u-sm-12 am-u-md-8 am-u-lg-9">
+									<input class="am-form-field" name="englishName" ng-model="dish.englishName" placeholder="English Name">
+									<!-- Validation - Valid -->
+									<span class="am-icon-check" ng-show="formDish.englishName.$dirty && formDish.englishName.$valid"></span>
+									<!-- Validation - Invalid -->
+									<span class="am-icon-remove" ng-show="formDish.englishName.$dirty && formDish.englishName.$invalid"></span>
+								</div>
+							</div>
+							<div class="am-margin-bottom-sm">&nbsp;</div>
+							<div class="am-form-group am-hide">
+								<input class="am-form-field" name="photo" ng-model="dish.photo.standardPhotoId" placeholder="Standard Photo Id"
+									required>
+							</div>
+						</fieldset>
+					</div>
+					<div class="am-tab-panel">
+						<fieldset>
+							<hr>
+							<div class="am-form-group am-form-group-sm">
+								<label class="am-form-label">
+									<strong> Description: </strong>
+								</label>
+								<textarea class="am-form-field am-text-middle" rows="6" ng-model="dish.description"></textarea>
+								<label class="am-form-label"
+									ng-class="dish.isRecommended === true ? 'am-text-default' : 'am-disabled am-text-disabled'">
+									<i class="am-icon-thumbs-up am-icon-sm"> </i>
+									<strong> Recommended: </strong>
+									<span style="display: inline-block;">
+										<input type="checkbox" style="zoom: 150%" ng-model="dish.isRecommended">
+									</span>
+								</label>
+								<textarea class="am-form-field" rows="1" name="recommendedReason"
+									ng-readonly="dish.isRecommended === true ? false : true" ng-model="dish.recommendedReason" placeholder="Reason"></textarea>
+							</div>
+						</fieldset>
+					</div>
+					<div class="am-tab-panel">
+						<fieldset>
+							<hr>
+							<div class="am-form-group am-form-group-sm am-text-left">
+								<label class="am-text-middle">
+									Overall:
+									<span class="am-badge">
+										<span ng-bind="::dish.rate.count"></span>
+										rates
+									</span>
+								</label>
+								<div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+									<div id="ipt-rate-taste" class="raty-control am-text-primary am-text-sm"
+										ng-class="dish.rate.overall >= 4 ? 'am-text-success' : dish.rate.overall >= 2.5 ? 'am-text-warning' : dish.rate.overall > 0 ?  'am-text-danger' : 'am-text-default'"
+										ng-bind="::dish.rate.overall"></div>
+								</div>
+							</div>
+							<hr>
+							<div class="am-form-group am-form-group-sm">
+								<label class="am-form-label am-u-sm-4 am-u-md-4 am-u-lg-4">Taste: </label>
+								<div class="am-u-sm-8 am-u-md-8 am-u-lg-8">
+									<div id="ipt-rate-taste" class="raty-control am-text-primary am-text-xs" ng-bind="dish.rate.taste"></div>
+								</div>
+							</div>
+							<div class="am-form-group am-form-group-sm">
+								<label class="am-form-label am-u-sm-4 am-u-md-4 am-u-lg-4">Style: </label>
+								<div class="am-u-sm-8 am-u-md-8 am-u-lg-8">
+									<div id="ipt-rate-style" class="raty-control am-text-primary am-text-xs" ng-bind="dish.rate.style"></div>
+								</div>
+							</div>
+							<div class="am-form-group am-form-group-sm">
+								<label class="am-form-label am-u-sm-4 am-u-md-4 am-u-lg-4">Service: </label>
+								<div class="am-u-sm-8 am-u-md-8 am-u-lg-8">
+									<div id="ipt-rate-service" class="raty-control am-text-primary am-text-xs" ng-bind="dish.rate.service"></div>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+			</div>
+			<div class="am-form-group am-form-group-sm">
+				<div class="am-btn-group am-btn-group-justify am-animation-slide-bottom">
+					<button class="am-btn am-btn-danger" ng-class="dish.id ? '' : 'am-hide'" ng-click="delete()">Delete</button>
+					<button class="am-btn am-btn-success" ng-click="save(formDish)" ng-disabled="formDish.$invalid">Save</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</section>
+<!-- ------------------------------- Footer ------------------------------------ -->
+<div ng-include="'modules/admin/components/footer.html'"></div>
+<!-- ========================== Modal - Confirm Save ===================== -->
+<div id="modal-confirm-save" class="am-modal am-modal-confirm" tabindex="-1">
+	<div class="am-modal-dialog">
+		<div class="am-modal-hd am-text-warning">
+			<strong>Confirm Save</strong>
+		</div>
+		<div class="am-modal-bd">
+			<span>
+				'
+				<span ng-bind="dish.chineseName || dish.englishName"></span>
+				' will be saved.
+			</span>
+		</div>
+		<div class="am-modal-footer">
+			<span class="am-modal-btn am-u-sm-6" data-am-modal-cancel>Cancel</span>
+			<strong class="am-modal-btn am-u-sm-6" data-am-modal-confirm ng-click="save()">OK</strong>
+		</div>
+	</div>
+</div>
+<!-- ========================== Modal - Alert Save Success ===================== -->
+<div id="modal-alert-save-success" class="am-modal am-modal-alert" tabindex="-1">
+	<div class="am-modal-dialog">
+		<div class="am-modal-hd">
+			<strong>Save Success</strong>
+		</div>
+		<div class="am-modal-bd">
+			<span></span>
+		</div>
+		<div class="am-modal-footer">
+			<span class="am-btn-default am-modal-btn" data-am-modal-confirm>OK</span>
+		</div>
+	</div>
+</div>
+<!-- ========================== Modal - Alert Save Fail ===================== -->
+<div id="modal-alert-save-fail" class="am-modal am-modal-alert" tabindex="-1">
+	<div class="am-modal-dialog">
+		<div class="am-modal-hd">
+			<strong>Save Fail</strong>
+		</div>
+		<div class="am-modal-bd">
+			<span>Remote server error, please try again or later.</span>
+		</div>
+		<div class="am-modal-footer">
+			<span class="am-btn-default am-modal-btn" data-am-modal-confirm>OK</span>
+		</div>
+	</div>
+</div>
+<!-- ========================== Modal - Confirm Delete ===================== -->
+<div id="modal-confirm-delete" class="am-modal am-modal-confirm" tabindex="-1">
+	<div class="am-modal-dialog">
+		<div class="am-modal-hd am-text-warning">
+			<strong>Confirm Delete</strong>
+		</div>
+		<div class="am-modal-bd">
+			<span>This dish will be deleted at all.</span>
+		</div>
+		<div class="am-modal-footer">
+			<span class="am-modal-btn am-u-sm-6" data-am-modal-cancel>Cancel</span>
+			<strong class="am-modal-btn am-u-sm-6" data-am-modal-confirm>OK</strong>
+		</div>
+	</div>
+</div>
+<!-- ========================== Modal - Alert Delete Success ===================== -->
+<div id="modal-alert-delete-success" class="am-modal am-modal-alert" tabindex="-1">
+	<div class="am-modal-dialog">
+		<div class="am-modal-hd">
+			<strong>Delete Success</strong>
+		</div>
+		<div class="am-modal-bd">
+			<span></span>
+		</div>
+		<div class="am-modal-footer">
+			<span class="am-btn-default am-modal-btn" data-am-modal-confirm>OK</span>
+		</div>
+	</div>
+</div>
+<!-- ========================== Modal - Alert Delete Fail ===================== -->
+<div id="modal-alert-delete-fail" class="am-modal am-modal-alert" tabindex="-1">
+	<div class="am-modal-dialog">
+		<div class="am-modal-hd">
+			<strong>Delete Fail</strong>
+		</div>
+		<div class="am-modal-bd">
+			<span>Remote server error, please try again or later.</span>
+		</div>
+		<div class="am-modal-footer">
+			<span class="am-btn-default am-modal-btn" data-am-modal-confirm>OK</span>
+		</div>
+	</div>
+</div>

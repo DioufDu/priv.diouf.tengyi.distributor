@@ -1,0 +1,88 @@
+<nav data-am-widget="menu" class="am-menu am-menu-offcanvas1" data-am-menu-offcanvas
+	ng-controller="canteen.statistics.controller">
+	<a href="javascript: void(0)" class="am-menu-toggle">
+		<i class="am-menu-toggle-icon am-icon-bars"></i>
+	</a>
+	<div id="canteen-menu" class="am-offcanvas">
+		<div class="am-offcanvas-bar am-offcanvas-bar-flip">
+			<ul class="am-menu-nav am-avg-sm-1">
+				<li>
+					<a href="#/about" ng-click="closeMenu(this)">
+						<i class="am-icon-copyright"></i>
+						<span class="am-navbar-label"> &nbsp;&nbsp;About </span>
+					</a>
+				</li>
+				<li>
+					<a href="#/contact" ng-click="closeMenu(this)">
+						<i class="am-icon-fax"></i>
+						<span class="am-navbar-label"> &nbsp;Contact </span>
+					</a>
+				</li>
+				<li class="am-parent">
+					<a href="##">
+						<i class="am-icon-camera"></i>
+						<span class="am-navbar-label"> &nbsp;Cameras </span>
+					</a>
+					<ul class="am-menu-sub am-collapse am-avg-sm-2">
+						<li>
+							<a href="http://10.58.124.89:1080/view/viewer_index.shtml?id=2503" target="_blank" ng-click="closeMenu(this)">
+								<button class="am-btn am-btn-default am-padding-xs">
+									<div>
+										<i class="am-icon-cutlery"></i>
+										<span class="am-navbar-label"> &nbsp;&nbsp; Chinese &nbsp;&nbsp; </span>
+									</div>
+								</button>
+							</a>
+						</li>
+						<li>
+							<a href="http://10.58.124.90:1080/view/viewer_index.shtml?id=12" target="_blank" ng-click="closeMenu(this)">
+								<button class="am-btn am-btn-default am-padding-xs">
+									<div>
+										<i class="am-icon-cutlery"></i>
+										<span class="am-navbar-label"> &nbsp;&nbsp; Western &nbsp;&nbsp; </span>
+									</div>
+								</button>
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li class="am-parent">
+					<a href="##">
+						<i class="am-icon-cutlery"></i>
+						<span class="am-navbar-label"> &nbsp;&nbsp;Menus </span>
+					</a>
+					<ul class="am-menu-sub am-collapse am-avg-sm-2">
+						<!-- Menu - Recently -->
+						<li ng-repeat="offer in offers">
+							<a href="#/dish/exhibition/date/{{offer.offerDate - 0}}" ng-click="closeMenu(this)">
+								<button class="am-btn am-btn-default am-padding-xs am-padding-top-sm am-padding-bottom-sm"
+									ng-class="::offer.isToday ? 'am-text-warning' : ''">
+									<strong>
+										<i class="am-icon-calendar"></i>
+										<span class="am-navbar-label" ng-bind="::offer.formattedOfferDate"></span>
+									</strong>
+									<div class="am-hide">
+										<!-- Left -->
+										<span class="am-fl">
+											<i class="am-icon-thumbs-up"></i>
+											&nbsp;
+											<span ng-bind="::offer.recommendationCount"></span>
+										</span>
+										<!-- Right  -->
+										<span class="am-fr">
+											<span class="am-badge" ng-class="::offer.isToday ? 'am-badge-warning' : ''">
+												<i class="am-icon-cutlery"></i>
+												&nbsp;
+												<span ng-bind="::offer.dishCount"></span>
+											</span>
+										</span>
+									</div>
+								</button>
+							</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>

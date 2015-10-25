@@ -1,0 +1,78 @@
+<!-- --------------------------------- Header ---------------------------------- -->
+<div ng-include="'modules/client/components/header.html'"></div>
+<!-- --------------------------------- Menu ---------------------------------- -->
+<div ng-include="'modules/client/components/menu.html'"></div>
+<!-- ------------------------------------- Top Bar ------------------------------ -->
+<div class="am-block am-animation-slide-top">
+	<div class="am-btn am-btn-default am-u-sm-2 am-u-md-2 am-u-lg-1">
+		<a href="#/dish/exhibition/date/{{offerDate - 24 * 60 * 60 * 1000}}">
+			<i class="am-icon-arrow-left"></i>
+		</a>
+	</div>
+	<div class="am-btn am-btn-default am-text-center am-u-sm-8 am-u-md-8 am-u-lg-10">
+		<i class="am-icon-calendar am-hide"></i>
+		<strong id="ipt-offer-date-selector" placeholder="Offer Date" readonly data-am-datepicker ng-bind="formattedOfferDate"></strong>
+	</div>
+	<div class="am-btn am-btn-default am-u-sm-2 am-u-md-2 am-u-lg-1">
+		<a href="#/dish/exhibition/date/{{offerDate + 24 * 60 * 60 * 1000}}">
+			<i class="am-icon-arrow-right"></i>
+		</a>
+	</div>
+</div>
+<hr>
+<!-- ------------------------------------- Meal Title ------------------------------ -->
+<div>
+	<nav class="am-text-primary am-text-lg am-padding-sm">
+		<h2 class="am-animation-slide-left am-fl">
+			<strong>Lines</strong>
+		</h2>
+		<div class="am-animation-slide-right am-fr">
+			<span class="am-badge" ng-bind="formattedOfferCalendar"></span>
+		</div>
+	</nav>
+</div>
+<!-- ------------------------------------- Dish Tabs ------------------------------ -->
+<div id="dish-detail-tab" class="am-tabs am-tabs-default am-animation-fade" data-am-tabs>
+	<ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify">
+		<li ng-repeat="dishGroup in dishGroups">
+			<a href="javascript: void(0)">
+				<strong class="am-text-sm" ng-bind="::dishGroup.key"></strong>
+			</a>
+		</li>
+	</ul>
+	<div class="am-tabs-bd" ng-repeat="dishGroup in dishGroups">
+		<div class="am-tab-panel">
+			<form class="am-form am-form-horizontal">
+				<ul data-am-widget="gallery" class="am-gallery am-avg-sm-2 am-avg-md-4 am-avg-lg-6 am-gallery-bordered"
+					data-am-gallery="{ pureview: false }">
+					<li ng-repeat="dish in dishGroup.items">
+						<div class="am-gallery-item am-text-center am-animation-scale-up">
+							<a class="am-text-sm" href="#/dish/{{::dish.id}}">
+								<img ng-src="{{::dish.photo.thumbnailPhotoUrl}}" data-rel="{{::dish.photo.fullScreenPhotoUrl}}"
+									alt="{{::dish.chineseName}}" />
+								<strong class="am-block" style="height: 70px;" ng-class="::dish.isRecommended === true ? 'am-text-warning' : ''">
+									<i class="am-icon-thumbs-up am-text-warning" ng-show="::dish.isRecommended"></i>
+									<span ng-bind="::dish.chineseName"></span>
+									<br>
+									<small ng-bind="::dish.englishName"></small>
+								</strong>
+							</a>
+						</div>
+					</li>
+				</ul>
+				<hr>
+				<div class="am-text-sm am-text-center">
+					<article class="am-animation-scale-up">
+						<small>图片仅供参考 | Pictures are only for reference</small>
+					</article>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="am-warning am-text-warning am-text-center am-padding-xl am-margin-xl am-animation-fade" ng-show="isEmpty">
+		<i class="am-icon-warning"></i>
+		<strong> No Dish Offer </strong>
+	</div>
+</div>
+<!-- ------------------------------- Footer ------------------------------------ -->
+<div ng-include="'modules/client/components/footer.html'"></div>

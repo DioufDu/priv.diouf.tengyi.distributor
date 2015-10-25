@@ -1,0 +1,147 @@
+<!-- --------------------------------- Header ---------------------------------- -->
+<div ng-include="'modules/admin/components/header.html'"></div>
+<!-- --------------------------------- Menu ---------------------------------- -->
+<div ng-include="'modules/admin/components/menu.html'"></div>
+<section class="am-panel-group" id="accordion-search">
+	<!-- ----------------------------------- Search Panel -------------------------------- -->
+	<div class="am-panel am-panel-default">
+		<div class="am-panel-hd">
+			<h4 class="am-panel-title am-text-primary"
+				data-am-collapse="{parent: '#accordion-search', target: '#accordion-search-criteria'}">
+				<i class="am-icon-search"></i>
+				Search
+			</h4>
+		</div>
+		<div id="accordion-search-criteria" class="am-panel-collapse am-collapse am-in">
+			<div class="am-panel-bd">
+				<form class="am-form">
+					<div class="am-form-group am-form-icon am-u-sm-12 am-u-md-6 am-u-lg-6">
+						<label class="am-form-label am-u-sm-4 am-u-md-4 am-u-lg-4">Name</label>
+						<div class="am-u-sm-8 am-u-md-8 am-u-lg-8">
+							<input class="am-form-field am-input-sm" placeholder="Name" ng-model="criteria.name">
+						</div>
+					</div>
+					<div class="am-form-group am-form-icon am-u-sm-12 am-u-md-6 am-u-lg-6">
+						<label class="am-form-label am-u-sm-4 am-u-md-4 am-u-lg-4">Line</label>
+						<div class="am-u-sm-8 am-u-md-8 am-u-lg-8">
+							<input class="am-form-field am-input-sm" placeholder="Line" ng-model="criteria.line">
+						</div>
+					</div>
+					<div class="am-form-group am-form-icon am-u-sm-12 am-u-md-6 am-u-lg-6">
+						<label class="am-form-label am-u-sm-4 am-u-md-4 am-u-lg-4">From</label>
+						<div class="am-u-sm-8 am-u-md-8 am-u-lg-8">
+							<input class="am-form-field am-input-sm" id="ipt-criteria-start-date" placeholder="From"
+								data-am-datepicker="{format: 'yyyy-mm-dd'}" readonly ng-model="criteria.startDate" />
+						</div>
+					</div>
+					<div class="am-form-group am-form-icon am-u-sm-12 am-u-md-6 am-u-lg-6">
+						<label class="am-u-sm-3 am-form-label">To</label>
+						<div class="am-u-sm-8 am-u-md-8 am-u-lg-8">
+							<input class="am-form-field am-input-sm" id="ipt-criteria-end-date" placeholder="To"
+								data-am-datepicker="{format: 'yyyy-mm-dd'}" readonly ng-model="criteria.endDate" />
+						</div>
+					</div>
+					<div class="am-form-group am-form-icon am-u-sm-12 am-u-md-12 am-u-lg-6">
+						<label class="am-u-sm-12 am-u-md-2 am-u-lg-4 am-form-label">Description</label>
+						<div class="am-u-sm-12 am-u-md-10 am-u-lg-8">
+							<input class="am-form-field am-input-sm" placeholder="Description" ng-model="criteria.description">
+						</div>
+					</div>
+					<div class="am-form-group am-form-icon am-u-sm-12 am-u-md-12 am-u-lg-6">
+						<label class="am-form-label am-u-sm-4 am-u-md-4 am-u-lg-4">Tags</label>
+						<div class="am-u-sm-8 am-u-md-8 am-u-lg-8">
+							<div class="am-btn-toolbar">
+								<div class="am-btn-group am-btn-group-xs">
+									<input class="am-btn am-btn-" type="button" value="All" placeholder="All"
+										ng-class="!criteria.isRecommended ? 'am-btn-primary am-active' : 'am-btn-default'"
+										ng-click="criteria.isRecommended = false">
+									<input class="am-btn" type="button" value="Recommended" placeholder="Recommended"
+										ng-class="criteria.isRecommended ? 'am-btn-primary am-active' : 'am-btn-default'"
+										ng-click="criteria.isRecommended = true">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="am-form-group">
+						<div class="am-btn-group am-btn-group-justify">
+							<button class="am-btn am-btn-sm am-btn-success" ng-click="search()">
+								<i class="am-icon-search"></i>
+							</button>
+							<button class="am-btn am-btn-sm am-btn-warning am-hide" ng-click="reset()">
+								<i class="am-icon-repeat"></i>
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- ----------------------------------- Result Gallery -------------------------------- -->
+	<div class="am-panel am-panel-default">
+		<div class="am-panel-hd">
+			<h4 class="am-panel-title am-text-primary"
+				data-am-collapse="{parent: '#accordion-search', target: '#accordion-search-result'}">
+				<i class="am-icon-leanpub"></i>
+				Result
+				<span ng-bind="dishes.length > 0 ? '(TOP ' + count + ' of ' + total + ')' : '(Empty)'"></span>
+			</h4>
+		</div>
+		<div id="accordion-search-result" class="am-panel-collapse am-collapse">
+			<div class="am-panel-bd">
+				<div data-am-widget="list_news" class="am-list-news am-list-news-default am-animation-scale-up">
+					<div class="am-list-news-hd am-cf am-hide">
+						<strong></strong>
+					</div>
+					<div class="am-list-news-bd">
+						<ul class="am-list">
+							<li
+								class="am-list-item-desced am-list-item-thumbed am-list-item-thumb-left am-animation-scale-up am-u-sm-12 am-u-md-6 am-u-lg-4"
+								ng-repeat="dish in dishes | orderBy : 'offerDate+line'" ng-click="navToDetail(dish.id)">
+								<div class="am-u-sm-4 am-list-thumb">
+									<a href="#/dish/{{::dish.id}}">
+										<img ng-src="{{::dish.photo.thumbnailPhotoUrl}}" alt="{{::dish.name}}" />
+										<br>
+									</a>
+								</div>
+								<div class="am-u-sm-8 am-list-main" style="height: 70px;"
+									ng-class="dish.isRecommended === true ? 'am-text-warning' : ''">
+									<h3 class="am-list-item-hd am-block am-text-sm">
+										<i class="am-icon-thumbs-up" ng-show="::dish.isRecommended"></i>
+										<strong ng-bind="::dish.chineseName"></strong>
+										<br>
+										<strong ng-bind="::dish.englishName"></strong>
+									</h3>
+									<div class="am-list-item-text"></div>
+								</div>
+								<div class="am-u-sm-12 am-text-sm">
+									<div>
+										<small class="am-badge am-badge-success am-fl">
+											Line:
+											<span ng-bind="::dish.line"> </span>
+										</small>
+										<strong class="am-badge am-badge-primary am-fr">
+											<span ng-bind="::dish.formattedOfferDate"></span>
+										</strong>
+									</div>
+									<br>
+									<div>
+										<small class="raty-control am-text-xs am-fl"
+											ng-class="dish.rate.overall >= 4 ? 'am-text-success' : dish.rate.overall >= 2.5 ? 'am-text-warning' : dish.rate.overall > 0 ?  'am-text-danger' : 'am-text-default'"
+											ng-bind="::dish.rate.overall"></small>
+										<strong class="am-text-secondary am-fr">
+											<i class="am-icon-user-md"></i>
+											<span ng-bind="::dish.rate.count"></span>
+										</strong>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="am-list-news-ft">&nbsp;</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- ------------------------------- Footer ------------------------------------ -->
+<div ng-include="'modules/admin/components/footer.html'"></div>

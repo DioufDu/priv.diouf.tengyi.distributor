@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence
+	version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="priv.diouf.tengyi.distributor">
+		<class>priv.diouf.tengyi.distributor.persistence.models.Dish</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.Rate</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.RateGroup</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.Photo</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.FullScreenPhoto</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.ThumbnailPhoto</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.OriginalPhoto</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.StandardPhoto</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.Modification</class>
+		<properties>
+			<property
+				name="hibernate.dialect"
+				value="org.hibernate.dialect.MySQL5Dialect" />
+			<property
+				name="hibernate.connection.driver_class"
+				value="com.mysql.jdbc.Driver" />
+			<property
+				name="hibernate.connection.username"
+				value="sa" />
+			<property
+				name="hibernate.connection.password"
+				value="Welcome1" />
+			<property
+				name="hibernate.connection.url"
+				value="jdbc:mysql://localhost:3306/priv.diouf.tengyi.distributor" />
+			<property
+				name="hibernate.max_fetch_depth"
+				value="3" />
+			<property
+				name="hibernate.hbm2ddl.auto"
+				value="update" />
+			<property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+		</properties>
+	</persistence-unit>
+</persistence>

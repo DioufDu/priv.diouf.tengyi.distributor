@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="canteen.app">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="description" content="Canteen Lunch App for All SAP Employees">
+<meta name="author" content="diouf.du@sap.com">
+<!-- Title -->
+<title>Shanghai Canteen</title>
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="resources/icons/favicon.png">
+<!-- Libraries Style -->
+<link rel="stylesheet" href="libs/normalize/css/normalize.min.css">
+<link rel="stylesheet" href="libs/raty/css/jquery.raty.css">
+<link rel="stylesheet" href="libs/amaze-ui/css/amazeui.min.css">
+<link rel="stylesheet" href="libs/amaze-ui/css/admin.css">
+<!-- Customized Style -->
+<link rel="stylesheet" href="styles/main.css">
+<!-- Libraries JavaScript -->
+<script src="libs/jquery/js/jquery.min.js"></script>
+<script src="libs/raty/js/jquery.raty.js"></script>
+<script src="libs/jquery/addons/form/js/jquery.form.js"></script>
+<script src="libs/amaze-ui/js/amazeui.min.js"></script>
+<script src="libs/icheck/js/icheck.min.js"></script>
+<script src="libs/moment/js/moment.min.js"></script>
+<!-- AngularJs -->
+<script src="libs/angular-js/js/angular.min.js"></script>
+<script src="libs/angular-js/js/angular-route.min.js"></script>
+<!-- AngularJs - App -->
+<script src="modules/global.js"></script>
+<script src="modules/admin/app.js"></script>
+<script src="modules/admin/router.js"></script>
+<!-- Custom Modules - Shared -->
+<!-- Custom Modules - Shared - Services -->
+<script src="modules/shared/services/amui.service.js"></script>
+<!-- Custom Modules - Admin -->
+<!-- Custom Modules - Admin - Services -->
+<!-- Custom Modules - Admin - Controllers (Main) -->
+<script src="modules/admin/controllers/menu.controller.js"></script>
+<script src="modules/admin/controllers/about.controller.js"></script>
+<!-- Custom Modules - Admin - Controllers (Dish) -->
+<script src="modules/admin/controllers/dish/search.controller.js"></script>
+<script src="modules/admin/controllers/dish/history.controller.js"></script>
+<script src="modules/admin/controllers/dish/editor.controller.js"></script>
+<!-- Custom JavaScript -->
+</head>
+<!-- Body -->
+<body class="am-container-compact">
+	<!-- ========================== View Contents ===================== -->
+	<div ng-view autoscroll id="view-content"></div>
+	<!-- ========================== View Contents ===================== -->
+	<div id="component-navbar" ng-include="'modules/admin/components/navbar.html'"></div>
+</body>
+</html>

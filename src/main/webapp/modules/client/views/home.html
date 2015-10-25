@@ -1,0 +1,82 @@
+<!-- -------------------------------- Header ----------------------------------- -->
+<header data-am-widget="header" class="am-header am-header-default am-animation-slide-top">
+	<div class="am-header-left am-header-nav"></div>
+	<h1 class="am-header-title">
+		<!-- Home -->
+		<a href="#/home">
+			<strong class="am-text-sm"> Shanghai Canteen </strong>
+		</a>
+	</h1>
+	<div class="am-header-right am-header-nav"></div>
+</header>
+<!-- -------------------------------- Menu ----------------------------------- -->
+<div data-am-sticky ng-include="'modules/client/components/menu.html'"></div>
+<!-- ------------------------------- Body ------------------------------------ -->
+<section class="am-container" style="padding: 0px; margin: 0px;">
+	<div class="am-animation-slide-top am-u-lg-8" style="padding: 0px; margin: 0px;">
+		<!-- -------------------------------- Jumbotron ----------------------------------- -->
+		<ul class="am-gallery am-gallery-overlay" data-am-gallery data-am-widget="gallery" style="padding: 0px; margin: 0px;">
+			<li style="padding: 0px; margin: 0px;">
+				<div class="am-gallery-item am-gallery-overlay">
+					<img src="resources\images\jumbotron1.jpg" alt="Welcome to SAP Labs Canteen" />
+					<h3 class="am-gallery-title">Welcome to SAP Labs Shanghai Canteen</h3>
+				</div>
+			</li>
+		</ul>
+		<!-- -------------------------------- Top Bars ----------------------------------- -->
+		<div class="am-btn-group am-btn-group-justify am-btn-group-lg am-animation-slide-bottom">
+			<a class="am-btn am-btn-warning" href="#/dish/popular">Popular</a>
+			<a class="am-btn am-btn-success" href="#/dish/today">Today</a>
+		</div>
+	</div>
+	<!-- -------------------------------- Recent Dishes ----------------------------------- -->
+	<div class="am-animation-slide-bottom am-u-lg-4">
+		<div data-am-widget="list_news" class="am-list-news am-list-news-default">
+			<div class="am-list-news-hd am-cf">
+				<strong class="am-text-secondary">
+					<i class="am-icon-thumbs-up"></i>
+					Chef's Specials
+				</strong>
+			</div>
+			<div class="am-list-news-bd">
+				<ul class="am-list">
+					<li
+						class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-bottom-left am-u-sm-12 am-u-md-12 am-u-lg-12"
+						ng-repeat="dish in dishes">
+						<div class="am-u-sm-4 am-list-thumb">
+							<a href="#/dish/{{::dish.id}}">
+								<img ng-src="{{::dish.photo.thumbnailPhotoUrl}}" alt="{{::dish.name}}" />
+								<br>
+							</a>
+						</div>
+						<div class="am-u-sm-8 am-list-main" style="height: 70px;">
+							<h3 class="am-list-item-hd am-block am-text-sm" ng-class="::dish.isToday ? 'am-text-warning' : ''">
+								<strong ng-bind="::dish.chineseName"></strong>
+								<br>
+								<strong ng-bind="::dish.englishName"></strong>
+							</h3>
+							<div class="am-list-item-text"></div>
+						</div>
+						<div class="am-u-sm-12 am-text-sm">
+							<div>
+								<small class="am-badge am-badge-success am-fl">
+									Line:
+									<span ng-bind="::dish.line"> </span>
+								</small>
+								<strong class="am-badge am-badge-primary am-fr">
+									<span ng-bind="::dish.formattedOfferDate"></span>
+								</strong>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<hr data-am-widget="divider" class="am-divider am-divider-default" />
+			<div class="am-list-news-ft am-hide">
+				<a class="am-btn am-btn-block am-btn-default" href="#/dish/specials"> More </a>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- ------------------------------- Footer ------------------------------------ -->
+<div ng-include="'modules/client/components/footer.html'"></div>

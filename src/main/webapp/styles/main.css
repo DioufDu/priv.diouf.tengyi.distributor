@@ -1,0 +1,18 @@
+i {
+	font-style: normal;
+}
+
+.am-container-compact {
+	width: 100%;
+	max-width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.am-disabled {
+	color: gray;
+}
+
+.am-text-disabled {
+	color: gray;
+}

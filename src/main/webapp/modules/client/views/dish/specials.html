@@ -1,0 +1,57 @@
+<!-- --------------------------------- Header ---------------------------------- -->
+<div ng-include="'modules/client/components/header.html'"></div>
+<!-- --------------------------------- Menu ---------------------------------- -->
+<div ng-include="'modules/client/components/menu.html'"></div>
+<section class="am-container" style="padding: 0px; margin: 0px;">
+	<!-- ------------------------------------- Chief Recommended Meal ------------------------------ -->
+	<div data-am-widget="list_news" class="am-list-news am-list-news-default am-animation-scale-up">
+		<div class="am-list-news-hd am-cf">
+			<strong class="am-text-secondary">
+				<i class="am-icon-thumbs-up"></i>
+				Chef's Specials
+			</strong>
+		</div>
+		<div class="am-list-news-bd">
+			<ul class="am-list">
+				<li
+					class="am-list-item-desced am-list-item-thumbed am-list-item-thumb-left am-animation-scale-up am-u-sm-12 am-u-md-6 am-u-lg-4"
+					ng-repeat="dish in dishes" ng-click="navToDetail(dish.id)">
+					<div class="am-u-sm-4 am-list-thumb">
+						<a href="#/dish/{{::dish.id}}">
+							<img ng-src="{{::dish.photo.thumbnailPhotoUrl}}" alt="{{::dish.name}}" />
+							<br>
+						</a>
+					</div>
+					<div class="am-u-sm-8 am-list-main" style="height: 70px;">
+						<h3 class="am-list-item-hd am-block am-text-sm" ng-class="::dish.isToday ? 'am-text-warning' : ''">
+							<strong ng-bind="::dish.chineseName"></strong>
+							<br>
+							<strong ng-bind="::dish.englishName"></strong>
+						</h3>
+						<div class="am-list-item-text"></div>
+					</div>
+					<div class="am-u-sm-12 am-text-sm">
+						<div>
+							<small class="am-badge am-badge-success am-fl">
+								Line:
+								<span ng-bind="::dish.line"> </span>
+							</small>
+							<strong class="am-badge am-badge-primary am-fr">
+								<span ng-bind="::dish.formattedOfferDate"></span>
+							</strong>
+						</div>
+						<br>
+						<div style="height: 40px;">
+							<span ng-bind="::dish.recommendedReason"></span>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="am-list-news-ft">
+			<button class="am-btn am-btn-block am-btn-default" ng-hide="last" ng-click="loadPage()">View More</button>
+		</div>
+	</div>
+</section>
+<!-- ------------------------------- Footer ------------------------------------ -->
+<div ng-include="'modules/client/components/footer.html'"></div>
