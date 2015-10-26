@@ -4,7 +4,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
-import priv.diouf.tengyi.distributor.persistence.models.Dish_;
+import priv.diouf.tengyi.distributor.persistence.models.account.Account_;
 
 public class GeneralPageableRequest<TCriteria> {
 
@@ -15,8 +15,8 @@ public class GeneralPageableRequest<TCriteria> {
 	protected static final int DEFAULT_PAGE_INDEX = 0;
 	protected static final int DEFAULT_PAGE_SIZE = 30;
 
-	private final Sort DEFAULT_SORT = new Sort(Direction.DESC, Dish_.offerDate.getName(), Dish_.line.getName(),
-			Dish_.chineseName.getName());
+	private final Sort DEFAULT_SORT = new Sort(Direction.DESC, Account_.type.getName(), Account_.status.getName(), Account_.name.getName(),
+			Account_.loginId.getName(), Account_.title.getName());
 
 	protected Integer pageIndex = DEFAULT_PAGE_INDEX;
 	protected Integer pageSize = DEFAULT_PAGE_SIZE;

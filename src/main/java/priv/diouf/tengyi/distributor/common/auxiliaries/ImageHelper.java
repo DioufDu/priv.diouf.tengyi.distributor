@@ -11,17 +11,17 @@ import javax.imageio.ImageIO;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.Thumbnails.Builder;
-import priv.diouf.tengyi.distributor.common.model.PhotoFormat;
-import priv.diouf.tengyi.distributor.common.model.PhotoType;
-import priv.diouf.tengyi.distributor.persistence.models.Photo;
-import priv.diouf.tengyi.distributor.services.exceptions.InvalidPhotoFormatException;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.thoughtworks.xstream.core.util.Base64Encoder;
+
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.Thumbnails.Builder;
+import priv.diouf.tengyi.distributor.common.models.enums.PhotoFormat;
+import priv.diouf.tengyi.distributor.common.models.enums.PhotoType;
+import priv.diouf.tengyi.distributor.persistence.models.photo.Photo;
+import priv.diouf.tengyi.distributor.services.exceptions.InvalidPhotoFormatException;
 
 public class ImageHelper {
 
@@ -37,8 +37,7 @@ public class ImageHelper {
 	 * Actions
 	 */
 
-	public static Builder<BufferedImage> transferImage(MultipartFile file, PhotoFormat photoFormat,
-			PhotoType photoType, int angle) {
+	public static Builder<BufferedImage> transferImage(MultipartFile file, PhotoFormat photoFormat, PhotoType photoType, int angle) {
 		try {
 			return transferImage(file.getInputStream(), photoType, photoFormat, angle);
 		} catch (IOException ex) {
@@ -53,7 +52,7 @@ public class ImageHelper {
 			int width = PhotoType.STANDARD.getWidth();
 			int heigth = PhotoType.STANDARD.getHeight();
 			int height = image.getHeight();
-			if (photo.getPhotoType() == PhotoType.ORIGINAL) {
+			if (photo.getType() == PhotoType.ORIGINAL) {
 				width = image.getWidth();
 				height = image.getHeight();
 				if (DEFAULT_RATE > width / height) {
@@ -61,11 +60,11 @@ public class ImageHelper {
 				} else {
 					width = (int) (height * DEFAULT_RATE);
 				}
-				return transferToByteArray(imageBuilder.forceSize(width, height).rotate(angle)
-						.outputFormat(photo.getPhotoFormat().getName()));
+				return transferToByteArray(imageBuilder.forceSize(width, height).rotate(angle).outputFormat(photo.getPhotoFormat()
+						.getName()));
 			} else {
-				width = photo.getPhotoType().getWidth();
-				heigth = photo.getPhotoType().getHeight();
+				width = photo.getType().getWidth();
+				heigth = photo.getType().getHeight();
 			}
 			if (angle % 360 != 0) {
 				imageBuilder.rotate(angle);
@@ -94,8 +93,7 @@ public class ImageHelper {
 		}
 	}
 
-	public static Builder<BufferedImage> transferImage(InputStream imageStream, PhotoType photoType,
-			PhotoFormat photoFormat, int angle) {
+	public static Builder<BufferedImage> transferImage(InputStream imageStream, PhotoType photoType, PhotoFormat photoFormat, int angle) {
 		try {
 			BufferedImage image = ImageIO.read(imageStream);
 			Builder<BufferedImage> imageBuilder = Thumbnails.of(image);
@@ -143,8 +141,7 @@ public class ImageHelper {
 		try (ByteArrayOutputStream imageOutputStream = new ByteArrayOutputStream()) {
 			imageBuilder.outputFormat(photoFormat.getName());
 			imageBuilder.toOutputStream(imageOutputStream);
-			return String
-					.format("%s %s", photoFormat.getMime(), BASE64_ENCODER.encode(imageOutputStream.toByteArray()));
+			return String.format("%s %s", photoFormat.getMime(), BASE64_ENCODER.encode(imageOutputStream.toByteArray()));
 		} catch (IOException ex) {
 			throw new InvalidPhotoFormatException(ex);
 		}
@@ -225,8 +222,7 @@ public class ImageHelper {
 		}
 	}
 
-	public static byte[] compress(Builder<? extends InputStream> imageBuilder, int width, int height)
-			throws IOException {
+	public static byte[] compress(Builder<? extends InputStream> imageBuilder, int width, int height) throws IOException {
 		if (imageBuilder == null) {
 			return null;
 		} else {

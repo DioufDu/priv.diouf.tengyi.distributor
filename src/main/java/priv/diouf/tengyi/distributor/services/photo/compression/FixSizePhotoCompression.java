@@ -3,7 +3,7 @@ package priv.diouf.tengyi.distributor.services.photo.compression;
 import java.awt.image.BufferedImage;
 
 import net.coobird.thumbnailator.Thumbnails.Builder;
-import priv.diouf.tengyi.distributor.common.model.PhotoType;
+import priv.diouf.tengyi.distributor.common.models.enums.PhotoType;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;

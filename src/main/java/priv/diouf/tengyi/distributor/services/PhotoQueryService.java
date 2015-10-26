@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import priv.diouf.tengyi.distributor.persistence.models.Photo;
-import priv.diouf.tengyi.distributor.persistence.repositories.FullScreenPhotoRepository;
-import priv.diouf.tengyi.distributor.persistence.repositories.OriginalPhotoRepository;
-import priv.diouf.tengyi.distributor.persistence.repositories.PhotoRepository;
-import priv.diouf.tengyi.distributor.persistence.repositories.ThumbnailPhotoRepository;
+import priv.diouf.tengyi.distributor.persistence.models.photo.Photo;
+import priv.diouf.tengyi.distributor.persistence.repositories.photo.FullScreenPhotoRepository;
+import priv.diouf.tengyi.distributor.persistence.repositories.photo.OriginalPhotoRepository;
+import priv.diouf.tengyi.distributor.persistence.repositories.photo.PhotoRepository;
+import priv.diouf.tengyi.distributor.persistence.repositories.photo.ThumbnailPhotoRepository;
 import priv.diouf.tengyi.distributor.services.exceptions.SpecifiedEntityNotFoundException;
 
 @Service

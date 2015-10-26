@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import priv.diouf.tengyi.distributor.common.model.PhotoFormat;
+import priv.diouf.tengyi.distributor.common.models.enums.PhotoFormat;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)

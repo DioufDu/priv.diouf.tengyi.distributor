@@ -4,61 +4,74 @@ import java.io.Serializable;
 import java.util.Calendar;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.apache.commons.lang3.StringUtils;
+import priv.diouf.tengyi.distributor.persistence.PersistenceConfig;
+import priv.diouf.tengyi.distributor.persistence.models.account.Account;
 
-@Embeddable
+@Entity
+@Table(name = "T_MODIFICATION", schema = PersistenceConfig.PERSISTENCE_SCHEMA_NAME)
 public class Modification implements Serializable {
 
 	/**
 	 * Generated Serial Version UID
 	 */
-	private static final long serialVersionUID = 3621535655623853663L;
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * ID
+	 */
+
+	@Id
+	@GeneratedValue
+	@Column(name = "ID")
+	protected long id;
 
 	/*
 	 * Fields
 	 */
 
-	@Column(name = "CREATE_DATE_TIME", nullable = false)
+	@Column(name = "CREATE_ON", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	protected Calendar createDateTime;
+	protected Calendar createOn;
 
-	@Column(name = "CREATE_USER_ID", nullable = true)
-	protected String createUserId;
-
-	@Column(name = "LAST_MODIFIED_DATE_TIME", nullable = false)
+	@Column(name = "UPDATE_ON", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	protected Calendar lastModifiedDateTime;
-
-	@Column(name = "LAST_MODIFIED_USER_ID", nullable = true)
-	protected String lastModifiedUserId;
+	protected Calendar updateOn;
 
 	/*
 	 * Navigations
 	 */
+
+	@Column(name = "CREATE_BY_ACCOUNT_ID", nullable = true)
+	protected Account createBy;
+
+	@Column(name = "UPDATE_BY_ACCOUNT_ID", nullable = true)
+	protected Account updateBy;
 
 	/*
 	 * Constructors
 	 */
 
 	public Modification() {
-		this.setCreateDateTime(Calendar.getInstance());
-		this.setLastModifiedDateTime(Calendar.getInstance());
+
 	}
 
-	public Modification(String userId) {
-		if (this.getCreateDateTime() == null) {
-			this.setCreateDateTime(Calendar.getInstance());
+	public Modification(Account account) {
+		if (this.getCreateOn() == null) {
+			this.setCreateOn(Calendar.getInstance());
 		}
-		this.setLastModifiedDateTime(Calendar.getInstance());
-		if (StringUtils.isBlank(userId)) {
-			if (StringUtils.isBlank(this.getCreateUserId())) {
-				this.setCreateUserId(userId);
+		this.setUpdateOn(Calendar.getInstance());
+		if (account != null) {
+			if (this.getCreateBy() == null) {
+				this.setCreateBy(account);
 			}
-			this.setLastModifiedUserId(userId);
+			this.setUpdateBy(account);
 		}
 	}
 
@@ -66,36 +79,44 @@ public class Modification implements Serializable {
 	 * Properties
 	 */
 
-	public Calendar getCreateDateTime() {
-		return createDateTime;
+	public long getId() {
+		return id;
 	}
 
-	public void setCreateDateTime(Calendar createDateTime) {
-		this.createDateTime = createDateTime;
+	public void setId(long id) {
+		this.id = id;
 	}
 
-	public String getCreateUserId() {
-		return createUserId;
+	public Calendar getCreateOn() {
+		return createOn;
 	}
 
-	public void setCreateUserId(String createUserId) {
-		this.createUserId = createUserId;
+	public void setCreateOn(Calendar createOn) {
+		this.createOn = createOn;
 	}
 
-	public Calendar getLastModifiedDateTime() {
-		return lastModifiedDateTime;
+	public Calendar getUpdateOn() {
+		return updateOn;
 	}
 
-	public void setLastModifiedDateTime(Calendar lastModifiedDateTime) {
-		this.lastModifiedDateTime = lastModifiedDateTime;
+	public void setUpdateOn(Calendar updateOn) {
+		this.updateOn = updateOn;
 	}
 
-	public String getLastModifiedUserId() {
-		return lastModifiedUserId;
+	public Account getCreateBy() {
+		return createBy;
 	}
 
-	public void setLastModifiedUserId(String lastModifiedUserId) {
-		this.lastModifiedUserId = lastModifiedUserId;
+	public void setCreateBy(Account createBy) {
+		this.createBy = createBy;
+	}
+
+	public Account getUpdateBy() {
+		return updateBy;
+	}
+
+	public void setUpdateBy(Account updateBy) {
+		this.updateBy = updateBy;
 	}
 
 }

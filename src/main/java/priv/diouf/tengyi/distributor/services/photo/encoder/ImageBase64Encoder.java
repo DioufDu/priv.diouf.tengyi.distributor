@@ -5,7 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import net.coobird.thumbnailator.Thumbnails.Builder;
-import priv.diouf.tengyi.distributor.common.model.PhotoFormat;
+import priv.diouf.tengyi.distributor.common.models.enums.PhotoFormat;
 import priv.diouf.tengyi.distributor.services.exceptions.InvalidPhotoFormatException;
 
 import org.springframework.beans.factory.annotation.Autowired;

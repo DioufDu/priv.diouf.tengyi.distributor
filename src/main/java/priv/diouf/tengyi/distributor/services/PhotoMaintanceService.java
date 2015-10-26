@@ -12,20 +12,20 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import priv.diouf.tengyi.distributor.common.auxiliaries.ImageHelper;
-import priv.diouf.tengyi.distributor.common.model.PhotoFormat;
-import priv.diouf.tengyi.distributor.common.model.PhotoType;
-import priv.diouf.tengyi.distributor.persistence.models.Dish;
-import priv.diouf.tengyi.distributor.persistence.models.FullScreenPhoto;
-import priv.diouf.tengyi.distributor.persistence.models.OriginalPhoto;
-import priv.diouf.tengyi.distributor.persistence.models.StandardPhoto;
-import priv.diouf.tengyi.distributor.persistence.models.ThumbnailPhoto;
-import priv.diouf.tengyi.distributor.persistence.repositories.DishRepository;
-import priv.diouf.tengyi.distributor.persistence.repositories.FullScreenPhotoRepository;
-import priv.diouf.tengyi.distributor.persistence.repositories.OriginalPhotoRepository;
-import priv.diouf.tengyi.distributor.persistence.repositories.PhotoRepository;
-import priv.diouf.tengyi.distributor.persistence.repositories.StandardPhotoRepository;
-import priv.diouf.tengyi.distributor.persistence.repositories.ThumbnailPhotoRepository;
-import priv.diouf.tengyi.distributor.web.models.responses.photo.PhotoIdCollection;
+import priv.diouf.tengyi.distributor.common.models.enums.PhotoFormat;
+import priv.diouf.tengyi.distributor.common.models.enums.PhotoType;
+import priv.diouf.tengyi.distributor.persistence.models.photo.FullScreenPhoto;
+import priv.diouf.tengyi.distributor.persistence.models.photo.OriginalPhoto;
+import priv.diouf.tengyi.distributor.persistence.models.photo.PhotoGroup;
+import priv.diouf.tengyi.distributor.persistence.models.photo.StandardPhoto;
+import priv.diouf.tengyi.distributor.persistence.models.photo.ThumbnailPhoto;
+import priv.diouf.tengyi.distributor.persistence.repositories.photo.FullScreenPhotoRepository;
+import priv.diouf.tengyi.distributor.persistence.repositories.photo.OriginalPhotoRepository;
+import priv.diouf.tengyi.distributor.persistence.repositories.photo.PhotoRepository;
+import priv.diouf.tengyi.distributor.persistence.repositories.photo.StandardPhotoRepository;
+import priv.diouf.tengyi.distributor.persistence.repositories.photo.ThumbnailPhotoRepository;
+import priv.diouf.tengyi.distributor.persistence.repositories.product.ProductRepository;
+import priv.diouf.tengyi.distributor.web.models.responses.photo.PhotoGroupInfo;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
@@ -36,7 +36,7 @@ public class PhotoMaintanceService {
 	 */
 
 	@Autowired
-	protected DishRepository dishRepository;
+	protected ProductRepository productRepository;
 
 	@Autowired
 	protected PhotoRepository photoRepository;
@@ -58,17 +58,17 @@ public class PhotoMaintanceService {
 	 */
 
 	@Transactional
-	public void migratePhotos(@Valid @NotNull PhotoIdCollection photoIds, @Valid @NotNull Dish dish) {
+	public void migratePhotos(@Valid @NotNull PhotoGroupInfo photoIds, @Valid @NotNull PhotoGroup photoGroup) {
 		// - Original Photo
 		OriginalPhoto originalPhoto = originalPhotoRepository.findOne(photoIds.getOriginalPhotoId());
 		int angle = photoIds.getAngle() % 360;
-		dish.setOriginalPhoto(originalPhoto);
+		photoGroup.setOriginalPhoto(originalPhoto);
 		if (angle != 0) {
 			originalPhoto.setContent(ImageHelper.transferImage(originalPhoto, angle));
 		}
 		// - Thumbnail Photo
 		ThumbnailPhoto thumbnailPhoto = thumbnailPhotoRepository.findOne(photoIds.getThumbnailPhotoId());
-		dish.setThumbnailPhoto(thumbnailPhoto);
+		photoGroup.setThumbnailPhoto(thumbnailPhoto);
 		if (angle != 0) {
 			thumbnailPhoto.setContent(ImageHelper.transferImage(thumbnailPhoto, angle));
 		}
@@ -77,19 +77,19 @@ public class PhotoMaintanceService {
 		if (angle != 0) {
 			standardPhoto.setContent(ImageHelper.transferImage(standardPhoto, angle));
 		}
-		dish.setStandardPhoto(standardPhoto);
+		photoGroup.setStandardPhoto(standardPhoto);
 
 		// - Full Screen Photo
 		FullScreenPhoto fullScreenPhoto = fullScreenPhotoRepository.findOne(photoIds.getFullScreenPhotoId());
 		if (angle != 0) {
 			fullScreenPhoto.setContent(ImageHelper.transferImage(fullScreenPhoto, angle));
 		}
-		dish.setFullScreenPhoto(fullScreenPhoto);
+		photoGroup.setFullScreenPhoto(fullScreenPhoto);
 
 	}
 
 	@Transactional
-	public PhotoIdCollection generatePhotos(byte[] photoBytes, PhotoFormat photoFormat) throws IOException {
+	public PhotoGroupInfo generatePhotos(byte[] photoBytes, PhotoFormat photoFormat) throws IOException {
 		// - Photo
 		OriginalPhoto originalPhoto = generateOriginalPhoto(photoBytes, photoFormat);
 		ThumbnailPhoto thumbnailPhoto = generateThumbnailPhoto(photoBytes, photoFormat);
@@ -98,7 +98,7 @@ public class PhotoMaintanceService {
 		// Save
 		photoRepository.saveAndFlush(originalPhoto, thumbnailPhoto, standardPhoto, fullScreenPhoto);
 		// Collect Ids
-		PhotoIdCollection photoIdCollection = new PhotoIdCollection();
+		PhotoGroupInfo photoIdCollection = new PhotoGroupInfo();
 		photoIdCollection.setOriginalPhotoId(originalPhoto.getId());
 		photoIdCollection.setThumbnailPhotoId(thumbnailPhoto.getId());
 		photoIdCollection.setStandardPhotoId(standardPhoto.getId());
@@ -107,16 +107,15 @@ public class PhotoMaintanceService {
 	}
 
 	@Transactional
-	public void generatePhotos(byte[] originalPhotoBytes, PhotoFormat photoFormat, Dish dish) throws IOException {
+	public void generatePhotos(byte[] originalPhotoBytes, PhotoFormat photoFormat, PhotoGroup photoGroup) throws IOException {
 		OriginalPhoto originalPhoto = generateOriginalPhoto(originalPhotoBytes, photoFormat);
-		dish.setOriginalPhoto(originalPhoto);
+		photoGroup.setOriginalPhoto(originalPhoto);
 		ThumbnailPhoto thumbnailPhoto = generateThumbnailPhoto(originalPhotoBytes, photoFormat);
-		dish.setThumbnailPhoto(thumbnailPhoto);
+		photoGroup.setThumbnailPhoto(thumbnailPhoto);
 		StandardPhoto standardPhoto = generateStandardPhoto(originalPhotoBytes, photoFormat);
-		dish.setStandardPhoto(standardPhoto);
+		photoGroup.setStandardPhoto(standardPhoto);
 		FullScreenPhoto fullScreenPhoto = generateFullScreenPhoto(originalPhotoBytes, photoFormat);
-		dish.setFullScreenPhoto(fullScreenPhoto);
-		;
+		photoGroup.setFullScreenPhoto(fullScreenPhoto);
 	}
 
 	@Transactional
@@ -125,7 +124,7 @@ public class PhotoMaintanceService {
 		OriginalPhoto originalPhoto = new OriginalPhoto();
 		originalPhoto.setVersion(UUID.randomUUID().toString());
 		originalPhoto.setPhotoFormat(photoFormat);
-		originalPhoto.setPhotoType(PhotoType.ORIGINAL);
+		originalPhoto.setType(PhotoType.ORIGINAL);
 		originalPhoto.setContent(photoBytes);
 		return originalPhoto;
 	}
@@ -135,7 +134,7 @@ public class PhotoMaintanceService {
 		FullScreenPhoto fullScreenPhoto = new FullScreenPhoto();
 		fullScreenPhoto.setVersion(UUID.randomUUID().toString());
 		fullScreenPhoto.setPhotoFormat(photoFormat);
-		fullScreenPhoto.setPhotoType(PhotoType.FULL_SCREEN);
+		fullScreenPhoto.setType(PhotoType.FULL_SCREEN);
 		fullScreenPhoto.setContent(ImageHelper.compress(photoBytes, PhotoType.FULL_SCREEN.getWidth(), PhotoType.FULL_SCREEN.getHeight()));
 		return fullScreenPhoto;
 	}
@@ -145,7 +144,7 @@ public class PhotoMaintanceService {
 		StandardPhoto standardPhoto = new StandardPhoto();
 		standardPhoto.setVersion(UUID.randomUUID().toString());
 		standardPhoto.setPhotoFormat(photoFormat);
-		standardPhoto.setPhotoType(PhotoType.STANDARD);
+		standardPhoto.setType(PhotoType.STANDARD);
 		standardPhoto.setContent(ImageHelper.compress(photoBytes, PhotoType.STANDARD.getWidth(), PhotoType.STANDARD.getHeight()));
 		return standardPhoto;
 	}
@@ -155,17 +154,17 @@ public class PhotoMaintanceService {
 		ThumbnailPhoto thumbnailPhoto = new ThumbnailPhoto();
 		thumbnailPhoto.setVersion(UUID.randomUUID().toString());
 		thumbnailPhoto.setPhotoFormat(photoFormat);
-		thumbnailPhoto.setPhotoType(PhotoType.THUMBNAIL);
+		thumbnailPhoto.setType(PhotoType.THUMBNAIL);
 		thumbnailPhoto.setContent(ImageHelper.compress(photoBytes, PhotoType.THUMBNAIL.getWidth(), PhotoType.THUMBNAIL.getHeight()));
 		return thumbnailPhoto;
 	}
 
 	@Transactional
-	public void deletePhotos(Dish dish) {
-		photoRepository.delete(dish.getThumbnailPhoto());
-		photoRepository.delete(dish.getStandardPhoto());
-		photoRepository.delete(dish.getFullScreenPhoto());
-		photoRepository.delete(dish.getOriginalPhoto());
+	public void deletePhotos(PhotoGroup photoGroup) {
+		photoRepository.delete(photoGroup.getThumbnailPhoto());
+		photoRepository.delete(photoGroup.getStandardPhoto());
+		photoRepository.delete(photoGroup.getFullScreenPhoto());
+		photoRepository.delete(photoGroup.getOriginalPhoto());
 	}
 
 	/*

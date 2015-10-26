@@ -15,14 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import priv.diouf.tengyi.distributor.common.auxiliaries.ImageHelper;
-import priv.diouf.tengyi.distributor.common.model.PhotoFormat;
-import priv.diouf.tengyi.distributor.common.model.PhotoType;
-import priv.diouf.tengyi.distributor.persistence.models.Photo;
-import priv.diouf.tengyi.distributor.services.DishQueryService;
+import priv.diouf.tengyi.distributor.common.models.enums.PhotoFormat;
+import priv.diouf.tengyi.distributor.common.models.enums.PhotoType;
+import priv.diouf.tengyi.distributor.persistence.models.photo.Photo;
+import priv.diouf.tengyi.distributor.services.AccountQueryService;
 import priv.diouf.tengyi.distributor.services.PhotoMaintanceService;
 import priv.diouf.tengyi.distributor.services.PhotoQueryService;
+import priv.diouf.tengyi.distributor.services.ProductQueryService;
 import priv.diouf.tengyi.distributor.services.exceptions.InvalidPhotoFormatException;
-import priv.diouf.tengyi.distributor.web.models.responses.photo.PhotoIdCollection;
+import priv.diouf.tengyi.distributor.web.models.responses.photo.PhotoGroupInfo;
 
 @RestController
 public class PhotoController {
@@ -35,7 +36,10 @@ public class PhotoController {
 	protected HttpServletResponse httpServletResponse;
 
 	@Autowired
-	protected DishQueryService dishQueryService;
+	protected AccountQueryService accountQueryService;
+
+	@Autowired
+	protected ProductQueryService productQueryService;
 
 	@Autowired
 	protected PhotoQueryService photoQueryService;
@@ -59,8 +63,8 @@ public class PhotoController {
 		}
 		Photo photo = photoQueryService.findPhoto(photoId);
 		try {
-			ImageHelper.transferImage(new BufferedInputStream(new ByteArrayInputStream(photo.getContent())), photo.getPhotoType(),
-					photo.getPhotoFormat(), angle).toOutputStream(this.httpServletResponse.getOutputStream());
+			ImageHelper.transferImage(new BufferedInputStream(new ByteArrayInputStream(photo.getContent())), photo.getType(), photo
+					.getPhotoFormat(), angle).toOutputStream(this.httpServletResponse.getOutputStream());
 		} catch (IOException ex) {
 			throw new InvalidPhotoFormatException();
 		}
@@ -74,8 +78,8 @@ public class PhotoController {
 		}
 		Photo photo = photoQueryService.findPhoto(photoId);
 		try {
-			ImageHelper.transferImage(new BufferedInputStream(new ByteArrayInputStream(photo.getContent())), photoType,
-					photo.getPhotoFormat(), angle).toOutputStream(this.httpServletResponse.getOutputStream());
+			ImageHelper.transferImage(new BufferedInputStream(new ByteArrayInputStream(photo.getContent())), photoType, photo
+					.getPhotoFormat(), angle).toOutputStream(this.httpServletResponse.getOutputStream());
 		} catch (IOException ex) {
 			throw new InvalidPhotoFormatException();
 		}
@@ -86,10 +90,10 @@ public class PhotoController {
 		if (dishId < 1) {
 			return;
 		}
-		Photo photo = dishQueryService.findOneWithDetails(dishId).getOriginalPhoto();
+		Photo photo = accountQueryService.findOneWithDetails(dishId).getAvatarPhotoGroup().getOriginalPhoto();
 		try {
-			ImageHelper.transferImage(new BufferedInputStream(new ByteArrayInputStream(photo.getContent())), photo.getPhotoType(),
-					photo.getPhotoFormat(), angle).toOutputStream(this.httpServletResponse.getOutputStream());
+			ImageHelper.transferImage(new BufferedInputStream(new ByteArrayInputStream(photo.getContent())), photo.getType(), photo
+					.getPhotoFormat(), angle).toOutputStream(this.httpServletResponse.getOutputStream());
 		} catch (IOException ex) {
 			throw new InvalidPhotoFormatException();
 		}
@@ -101,17 +105,17 @@ public class PhotoController {
 		if (dishId < 1) {
 			return;
 		}
-		Photo photo = dishQueryService.findOneWithDetails(dishId).getOriginalPhoto();
+		Photo photo = accountQueryService.findOneWithDetails(dishId).getAvatarPhotoGroup().getOriginalPhoto();
 		try {
-			ImageHelper.transferImage(new BufferedInputStream(new ByteArrayInputStream(photo.getContent())), photoType,
-					photo.getPhotoFormat(), angle).toOutputStream(this.httpServletResponse.getOutputStream());
+			ImageHelper.transferImage(new BufferedInputStream(new ByteArrayInputStream(photo.getContent())), photoType, photo
+					.getPhotoFormat(), angle).toOutputStream(this.httpServletResponse.getOutputStream());
 		} catch (IOException ex) {
 			throw new InvalidPhotoFormatException();
 		}
 	}
 
 	@RequestMapping(value = "photo", method = RequestMethod.POST)
-	public PhotoIdCollection upload(@RequestParam(value = "photo", required = true) MultipartFile file) throws IOException {
+	public PhotoGroupInfo upload(@RequestParam(value = "photo", required = true) MultipartFile file) throws IOException {
 		PhotoFormat photoFormat = ImageHelper.identify(file);
 		if (photoFormat != null) {
 			return photoMaintanceService.generatePhotos(ImageHelper.encodeImageAsByteArray(ImageHelper.transferImage(file, photoFormat,

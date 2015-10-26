@@ -5,15 +5,21 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 	<persistence-unit name="priv.diouf.tengyi.distributor">
-		<class>priv.diouf.tengyi.distributor.persistence.models.Dish</class>
-		<class>priv.diouf.tengyi.distributor.persistence.models.Rate</class>
-		<class>priv.diouf.tengyi.distributor.persistence.models.RateGroup</class>
-		<class>priv.diouf.tengyi.distributor.persistence.models.Photo</class>
-		<class>priv.diouf.tengyi.distributor.persistence.models.FullScreenPhoto</class>
-		<class>priv.diouf.tengyi.distributor.persistence.models.ThumbnailPhoto</class>
-		<class>priv.diouf.tengyi.distributor.persistence.models.OriginalPhoto</class>
-		<class>priv.diouf.tengyi.distributor.persistence.models.StandardPhoto</class>
+		
+		<class>priv.diouf.tengyi.distributor.persistence.models.account.Account</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.account.Contact</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.account.Address</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.product.Product</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.product.PricingModel</class>
 		<class>priv.diouf.tengyi.distributor.persistence.models.Modification</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.photo.Photo</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.photo.FullScreenPhoto</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.photo.ThumbnailPhoto</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.photo.OriginalPhoto</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.photo.StandardPhoto</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.photo.PhotoGroup</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.photo.ProductPhotoGroup</class>
+		<class>priv.diouf.tengyi.distributor.persistence.models.photo.AvatarPhotoGroup</class>
 		<properties>
 			<property
 				name="hibernate.dialect"
