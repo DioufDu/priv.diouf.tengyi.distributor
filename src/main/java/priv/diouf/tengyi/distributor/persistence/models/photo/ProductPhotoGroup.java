@@ -20,13 +20,13 @@ public class ProductPhotoGroup extends PhotoGroup implements Serializable {
 	/**
 	 * Generated Serial Version UID
 	 */
-	private static final long serialVersionUID = 7151363363484283789L;
+	private static final long serialVersionUID = 1L;
 
 	/*
 	 * Navigations
 	 */
 
-	@ManyToOne(cascade = CascadeType.REFRESH, optional = false)
+	@ManyToOne(cascade = CascadeType.REFRESH, optional = true)
 	@JoinColumn(name = "PRODUCT_ID")
 	protected Product product;
 
@@ -36,6 +36,10 @@ public class ProductPhotoGroup extends PhotoGroup implements Serializable {
 
 	public ProductPhotoGroup() {
 
+	}
+
+	public ProductPhotoGroup(Product product) {
+		this.setProduct(product);
 	}
 
 	/*

@@ -36,19 +36,19 @@ public class PricingModel implements Serializable {
 	 * Fields
 	 */
 
-	@Column(name = "FACTORY_PRICE")
+	@Column(name = "FACTORY_PRICE", length = 32, precision = 32, scale = 20)
 	public BigDecimal factoryPrice;
 
-	@Column(name = "UNIFIED_PRICE")
+	@Column(name = "UNIFIED_PRICE", length = 32, precision = 32, scale = 20)
 	public BigDecimal unifiedPrice;
 
-	@Column(name = "STORE_PRICE")
+	@Column(name = "STORE_PRICE", length = 32, precision = 32, scale = 20)
 	public BigDecimal storePrice;
 
-	@Column(name = "TERMINAL_PICE")
+	@Column(name = "TERMINAL_PICE", length = 32, precision = 32, scale = 20)
 	public BigDecimal terminalPice;
 
-	@Column(name = "PRICE_STRATEGY")
+	@Column(name = "PRICE_STRATEGY", length = 32, precision = 32, scale = 20)
 	public PriceStrategy strategy;
 
 	/*
@@ -69,6 +69,10 @@ public class PricingModel implements Serializable {
 
 	public PricingModel() {
 
+	}
+
+	public PricingModel(Product product) {
+		this.setProduct(product);
 	}
 
 	/*
@@ -121,6 +125,14 @@ public class PricingModel implements Serializable {
 
 	public void setStrategy(PriceStrategy strategy) {
 		this.strategy = strategy;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 }

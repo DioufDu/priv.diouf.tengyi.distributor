@@ -3,10 +3,13 @@ package priv.diouf.tengyi.distributor.persistence.models;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -48,10 +51,12 @@ public class Modification implements Serializable {
 	 * Navigations
 	 */
 
-	@Column(name = "CREATE_BY_ACCOUNT_ID", nullable = true)
+	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+	@JoinColumn(name = "CREATE_BY_ACCOUNT_ID")
 	protected Account createBy;
 
-	@Column(name = "UPDATE_BY_ACCOUNT_ID", nullable = true)
+	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+	@JoinColumn(name = "UPDATE_BY_ACCOUNT_ID")
 	protected Account updateBy;
 
 	/*

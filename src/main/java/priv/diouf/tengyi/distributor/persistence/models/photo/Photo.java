@@ -40,18 +40,18 @@ public abstract class Photo implements Serializable {
 	 * Scalar Fields
 	 */
 
-	@Column(name = "VERSION", nullable = false)
+	@Column(name = "VERSION", length = 64, nullable = false)
 	protected String version;
 
-	@Column(name = "FORMAT", nullable = false)
+	@Column(name = "FORMAT", length = 16, nullable = false)
 	@Enumerated(EnumType.STRING)
 	protected PhotoFormat format;
 
-	@Column(name = "TYPE", nullable = false, insertable = false, updatable = false)
+	@Column(name = "TYPE", length = 16, nullable = false, insertable = false, updatable = false)
 	@Enumerated(EnumType.STRING)
 	protected PhotoType type;
 
-	@Column(name = "CONTENT", nullable = false)
+	@Column(name = "CONTENT", length = 4 * 1024 * 1024, nullable = false)
 	@Basic(fetch = FetchType.LAZY)
 	protected byte[] content;
 

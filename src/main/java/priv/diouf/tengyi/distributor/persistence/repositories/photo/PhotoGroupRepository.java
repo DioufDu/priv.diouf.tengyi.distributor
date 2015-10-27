@@ -24,4 +24,5 @@ public class PhotoGroupRepository extends GeneralPhotoGroupRepository<PhotoGroup
 	public PhotoGroupRepository(EntityManager entityManager) {
 		super(PhotoGroup.class, entityManager);
 	}
+
 }

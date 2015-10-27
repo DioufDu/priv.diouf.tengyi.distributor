@@ -42,7 +42,7 @@ public abstract class PhotoGroup implements Serializable {
 	 * Fields
 	 */
 
-	@Column(name = "TYPE", nullable = false, insertable = false, updatable = false)
+	@Column(name = "TYPE", length = 16, nullable = false, insertable = false, updatable = false)
 	@Enumerated(EnumType.STRING)
 	protected PhotoGroupType type;
 

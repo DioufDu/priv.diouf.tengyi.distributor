@@ -34,19 +34,19 @@ public class Contact implements Serializable {
 	 * Scalar Fields
 	 */
 
-	@Column(name = "TELEPHONE")
+	@Column(name = "TELEPHONE", length = 32)
 	protected String telephone;
 
-	@Column(name = "CELLPHONE")
+	@Column(name = "CELLPHONE", length = 32)
 	protected String cellphone;
 
-	@Column(name = "ALTERNATIVE_PHONE")
+	@Column(name = "ALTERNATIVE_PHONE", length = 32)
 	protected String alternativePhone;
 
-	@Column(name = "FAX")
+	@Column(name = "FAX", length = 32)
 	protected String fax;
 
-	@Column(name = "EMAIL")
+	@Column(name = "EMAIL", length = 64)
 	protected String email;
 
 	/*

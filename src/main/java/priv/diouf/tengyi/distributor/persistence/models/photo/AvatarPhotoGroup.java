@@ -19,7 +19,7 @@ public class AvatarPhotoGroup extends PhotoGroup implements Serializable {
 	/**
 	 * Generated Serial Version UID
 	 */
-	private static final long serialVersionUID = 7151363363484283789L;
+	private static final long serialVersionUID = 1L;
 
 	/*
 	 * Navigations
@@ -35,6 +35,10 @@ public class AvatarPhotoGroup extends PhotoGroup implements Serializable {
 
 	public AvatarPhotoGroup() {
 
+	}
+
+	public AvatarPhotoGroup(Account account) {
+		this.setAccount(account);
 	}
 
 	/*

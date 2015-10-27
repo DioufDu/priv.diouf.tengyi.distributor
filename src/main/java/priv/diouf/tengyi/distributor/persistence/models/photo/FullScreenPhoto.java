@@ -15,7 +15,7 @@ public class FullScreenPhoto extends Photo implements Serializable {
 	/**
 	 * Generated Serial Version UID
 	 */
-	private static final long serialVersionUID = -6613954183559671026L;
+	private static final long serialVersionUID = -1L;
 
 	/*
 	 * Constructors

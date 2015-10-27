@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -21,6 +22,7 @@ import priv.diouf.tengyi.distributor.persistence.models.photo.AvatarPhotoGroup;
 
 @Entity
 @Table(name = "T_ACCOUNT", schema = PersistenceConfig.PERSISTENCE_SCHEMA_NAME)
+@DiscriminatorColumn(name = "TYPE")
 public class Account implements Serializable {
 
 	/**
@@ -41,23 +43,23 @@ public class Account implements Serializable {
 	 * Fields
 	 */
 
-	@Column(name = "LOGIN_ID")
+	@Column(name = "LOGIN_ID", length = 64)
 	protected String loginId;
 
-	@Column(name = "NAME")
+	@Column(name = "NAME", length = 128)
 	protected String name;
 
-	@Column(name = "TITLE")
+	@Column(name = "TITLE", length = 32)
 	protected String title;
 
-	@Column(name = "CLEAR_PASSWORD")
+	@Column(name = "CLEAR_PASSWORD", length = 32)
 	protected String clearPassword;
 
-	@Column(name = "TYPE")
+	@Column(name = "TYPE", length = 16, nullable = false, insertable = false, updatable = false)
 	@Enumerated(EnumType.STRING)
 	protected AccountType type;
 
-	@Column(name = "Status")
+	@Column(name = "STATUS", length = 16)
 	@Enumerated(EnumType.STRING)
 	protected AccountStatus status;
 
@@ -69,7 +71,7 @@ public class Account implements Serializable {
 	 * Navigations
 	 */
 
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = true)
 	@JoinColumn(name = "AVATAR_PHOTO_GROUP_ID")
 	protected AvatarPhotoGroup avatarPhotoGroup;
 

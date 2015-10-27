@@ -8,17 +8,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import priv.diouf.tengyi.distributor.web.annontations.AuthenticatedPrivilege;
 
-@Component
+//@Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Lazy(true)
-public class PrivilegeBasedAuthenticationInterceptor extends HandlerInterceptorAdapter implements
-		CustomizedHandlerInterceptor {
+public class PrivilegeBasedAuthenticationInterceptor extends HandlerInterceptorAdapter implements CustomizedHandlerInterceptor {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

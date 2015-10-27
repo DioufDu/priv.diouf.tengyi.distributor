@@ -28,7 +28,7 @@ public class AdminController {
 	 */
 
 	@AuthenticatedRole("Admin")
-	@RequestMapping(value = "admin/initial/test", method = RequestMethod.GET)
+	@RequestMapping(value = "admin/initial", method = RequestMethod.GET)
 	public void initialTestData() {
 		dataInitializerHolder.execute();
 	}

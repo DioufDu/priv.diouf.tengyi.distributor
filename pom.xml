@@ -15,6 +15,7 @@
 		<jdk.version>1.8</jdk.version>
 		<!-- Dependencies Variables -->
 		<org.springframework.version>4.2.2.RELEASE</org.springframework.version>
+		<org.springframework.security.version>4.0.2.RELEASE</org.springframework.security.version>
 		<org.hibernate.version>5.0.2.Final</org.hibernate.version>
 		<com.fasterxml.jackson.version>2.6.3</com.fasterxml.jackson.version>
 	</properties>
@@ -35,6 +36,21 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${org.springframework.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${org.springframework.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-ldap</artifactId>
+			<version>${org.springframework.security.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.data</groupId>

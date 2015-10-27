@@ -15,7 +15,7 @@ public class StandardPhoto extends Photo implements Serializable {
 	/**
 	 * Generated Serial Version UID
 	 */
-	private static final long serialVersionUID = 7151363363484283789L;
+	private static final long serialVersionUID = 1L;
 
 	/*
 	 * Constructors

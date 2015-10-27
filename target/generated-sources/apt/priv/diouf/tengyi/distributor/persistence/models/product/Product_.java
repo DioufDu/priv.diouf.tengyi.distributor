@@ -13,8 +13,8 @@ import priv.diouf.tengyi.distributor.persistence.models.photo.ProductPhotoGroup;
 public abstract class Product_ {
 
 	public static volatile SingularAttribute<Product, PricingModel> pricingModel;
-	public static volatile SingularAttribute<Product, String> series;
 	public static volatile SingularAttribute<Product, String> name;
+	public static volatile SingularAttribute<Product, String> serie;
 	public static volatile SingularAttribute<Product, String> specification;
 	public static volatile SingularAttribute<Product, String> model;
 	public static volatile SingularAttribute<Product, String> comment;

@@ -40,22 +40,22 @@ public class Product implements Serializable {
 	 * Fields
 	 */
 
-	@Column(name = "NAME")
+	@Column(name = "NAME", length = 64)
 	public String name;
 
-	@Column(name = "SERIES")
-	public String series;
+	@Column(name = "SERIE", length = 64)
+	public String serie;
 
-	@Column(name = "MODEL")
+	@Column(name = "MODEL", length = 64)
 	public String model;
 
-	@Column(name = "SPECIFICATION")
+	@Column(name = "SPECIFICATION", length = 64)
 	public String specification;
 
-	@Column(name = "COMMENT")
+	@Column(name = "COMMENT", length = 512)
 	public String comment;
 
-	@Column(name = "STATUS")
+	@Column(name = "STATUS", length = 16)
 	public ProductStatus status;
 
 	/*
@@ -104,12 +104,12 @@ public class Product implements Serializable {
 		this.name = name;
 	}
 
-	public String getSeries() {
-		return series;
+	public String getSerie() {
+		return serie;
 	}
 
-	public void setSeries(String series) {
-		this.series = series;
+	public void setSerie(String serie) {
+		this.serie = serie;
 	}
 
 	public String getModel() {

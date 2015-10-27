@@ -18,7 +18,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import priv.diouf.tengyi.distributor.persistence.exceptions.CommonPersistenceException;
 
 @Configuration
-public class PersistenceConfig {
+public class PersistenceConfig implements AutoCloseable {
 
 	/*
 	 * Fields
@@ -77,6 +77,12 @@ public class PersistenceConfig {
 			this.entityManager = SharedEntityManagerCreator.createSharedEntityManager(this.entityManagerFactory());
 		}
 		return this.entityManager;
+	}
+
+	@Override
+	public void close() throws Exception {
+		this.entityManager.close();
+		this.entityManagerFactory.close();
 	}
 
 	/*

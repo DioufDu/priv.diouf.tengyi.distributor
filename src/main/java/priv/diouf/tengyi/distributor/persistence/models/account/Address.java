@@ -34,22 +34,22 @@ public class Address implements Serializable {
 	 * Scalar Fields
 	 */
 
-	@Column(name = "OVERALL")
+	@Column(name = "OVERALL", length = 512)
 	protected String overall;
 
-	@Column(name = "COUNTRY")
+	@Column(name = "COUNTRY", length = 32)
 	protected String country;
 
-	@Column(name = "PROVINCE")
+	@Column(name = "PROVINCE", length = 32)
 	protected String province;
 
-	@Column(name = "CITY")
+	@Column(name = "CITY", length = 32)
 	protected String city;
 
-	@Column(name = "ZONE")
+	@Column(name = "ZONE", length = 32)
 	protected String zone;
 
-	@Column(name = "ZIP")
+	@Column(name = "ZIP", length = 16)
 	protected String zip;
 
 	/*
