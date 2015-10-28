@@ -22,6 +22,7 @@ public abstract class GeneralEntityFactory<TEntity> implements EntityFactory<TEn
 	private Type[] genericTypes;
 	private Class<TEntity> entityType;
 	private List<TEntity> allCreatedEntities;
+	private boolean isSaved = false;
 
 	/**
 	 * Data Initializer
@@ -42,8 +43,12 @@ public abstract class GeneralEntityFactory<TEntity> implements EntityFactory<TEn
 	@Override
 	@Transactional
 	public void saveAll() {
+		if (isSaved) {
+			return;
+		}
 		this.getGeneralJpaRepository().save(this.getAll());
 		this.getGeneralJpaRepository().flush();
+		this.isSaved = true;
 	}
 
 	@Override
@@ -71,12 +76,6 @@ public abstract class GeneralEntityFactory<TEntity> implements EntityFactory<TEn
 		this.fulfill(allCreatedEntities);
 		if (!CollectionUtils.isEmpty(allCreatedEntities)) {
 			allCreatedEntities = this.getGeneralJpaRepository().save(allCreatedEntities);
-		}
-		// Update the depend entities after creation
-		if (!ArrayUtils.isEmpty(dependEntityFactories)) {
-			for (EntityFactory<?> dependEntityFactory : dependEntityFactories) {
-				dependEntityFactory.saveAll();
-			}
 		}
 		this.getGeneralJpaRepository().flush();
 		return allCreatedEntities;

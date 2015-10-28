@@ -8,12 +8,12 @@ import org.springframework.util.CollectionUtils;
 
 import priv.diouf.tengyi.distributor.persistence.models.account.Account;
 
-public class AccountList extends ArrayList<AccountDetail> implements Serializable {
+public abstract class AccountList<TAccountModel> extends ArrayList<TAccountModel> implements Serializable {
 
 	/**
 	 * Generated Serial Version UID
 	 */
-	private static final long serialVersionUID = -9142298842946763771L;
+	private static final long serialVersionUID = 1L;
 
 	/*
 	 * Constructors
@@ -23,9 +23,10 @@ public class AccountList extends ArrayList<AccountDetail> implements Serializabl
 		super();
 		if (!CollectionUtils.isEmpty(accounts)) {
 			for (Account account : accounts) {
-				this.add(new AccountDetail(account));
+				this.add(this.createModel(account));
 			}
 		}
 	}
 
+	protected abstract TAccountModel createModel(Account account);
 }

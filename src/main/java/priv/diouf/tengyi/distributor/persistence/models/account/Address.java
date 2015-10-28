@@ -67,6 +67,10 @@ public class Address implements Serializable {
 
 	}
 
+	public Address(Account account) {
+		this.setAccount(account);
+	}
+
 	/*
 	 * Properties
 	 */

@@ -25,7 +25,7 @@ public class AvatarPhotoGroup extends PhotoGroup implements Serializable {
 	 * Navigations
 	 */
 
-	@OneToOne(mappedBy = "avatarPhotoGroup", cascade = CascadeType.REFRESH, optional = false)
+	@OneToOne(mappedBy = "avatarPhotoGroup", cascade = { CascadeType.REFRESH, CascadeType.MERGE }, optional = false)
 	// @JoinColumn(name = "ACCOUNT_ID")
 	protected Account account;
 

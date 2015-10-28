@@ -2,29 +2,28 @@ package priv.diouf.tengyi.distributor.web.models.responses.account;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import priv.diouf.tengyi.distributor.common.models.enums.AccountType;
 
 public class AccountStatistics extends ArrayList<AccountStatistics.Item> implements Serializable {
 
 	/**
 	 * Generated Serial Version UID
 	 */
-	private static final long serialVersionUID = -323593314600559214L;
+	private static final long serialVersionUID = 1L;
 
 	/*
 	 * Actions
 	 */
 
-	public AccountStatistics(Map<Calendar, long[]> dishGroupsByLine) {
-		for (Entry<Calendar, long[]> dishGroupByLine : dishGroupsByLine.entrySet()) {
-			if (dishGroupByLine == null) {
+	public AccountStatistics(Map<AccountType, Long> groups) {
+		for (Entry<AccountType, Long> group : groups.entrySet()) {
+			if (group == null) {
 				continue;
 			}
-			this.add(new Item(dishGroupByLine));
+			this.add(new Item(group));
 		}
 	}
 
@@ -43,51 +42,37 @@ public class AccountStatistics extends ArrayList<AccountStatistics.Item> impleme
 		 * Fields
 		 */
 
-		@JsonProperty("offerDate")
-		protected Calendar offerDate;
+		protected AccountType type;
 
-		@JsonProperty("dishCount")
-		protected long dishCount;
-
-		@JsonProperty("recommendationCount")
-		protected long recommendationCount;
+		protected Long count;
 
 		/*
 		 * Constructors
 		 */
 
-		public Item(Entry<Calendar, long[]> dishGroupByLine) {
-			this.setOfferDate(dishGroupByLine.getKey());
-			this.setDishCount((long) dishGroupByLine.getValue()[0]);
-			this.setRecommendationCount((long) dishGroupByLine.getValue()[1]);
+		public Item(Entry<AccountType, Long> groupItem) {
+			this.setType(groupItem.getKey());
+			this.setCount(groupItem.getValue());
 		}
 
 		/*
 		 * Properties
 		 */
 
-		public Calendar getOfferDate() {
-			return offerDate;
+		public AccountType getType() {
+			return type;
 		}
 
-		public void setOfferDate(Calendar offerDate) {
-			this.offerDate = offerDate;
+		public void setType(AccountType type) {
+			this.type = type;
 		}
 
-		public long getDishCount() {
-			return dishCount;
+		public Long getCount() {
+			return count;
 		}
 
-		public void setDishCount(long dishCount) {
-			this.dishCount = dishCount;
-		}
-
-		public long getRecommendationCount() {
-			return recommendationCount;
-		}
-
-		public void setRecommendationCount(long recommendationCount) {
-			this.recommendationCount = recommendationCount;
+		public void setCount(Long count) {
+			this.count = count;
 		}
 
 	}

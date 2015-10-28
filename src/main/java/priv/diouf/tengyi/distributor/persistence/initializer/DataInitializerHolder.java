@@ -10,6 +10,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import priv.diouf.tengyi.distributor.persistence.initializer.factories.EntityFactory;
 import priv.diouf.tengyi.distributor.persistence.initializer.factories.MasterDataEntityFactory;
@@ -44,6 +45,7 @@ public class DataInitializerHolder {
 	 */
 
 	// @PostConstruct
+	@Transactional
 	public List<EntityFactory> execute() {
 		switch (STRATEGY) {
 		case APPEND:

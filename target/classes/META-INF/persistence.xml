@@ -47,6 +47,12 @@
 			<property
 				name="eclipselink.ddl-generation"
 				value="drop-and-create-tables" />
+			<property
+				name="hibernate.show_sql"
+				value="true" />
+			<property
+				name="hibernate.format_sql"
+				value="true" />
 		</properties>
 	</persistence-unit>
 </persistence>

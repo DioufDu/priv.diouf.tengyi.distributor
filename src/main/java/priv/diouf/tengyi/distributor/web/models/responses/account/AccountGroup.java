@@ -13,12 +13,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import priv.diouf.tengyi.distributor.persistence.models.account.Account;
 
-public abstract class AccountGroup<TGroup extends AccountGroup.Group<TGroupKey>, TGroupKey extends Serializable> extends TreeSet<TGroup> implements Serializable {
+public abstract class AccountGroup<TGroup extends AccountGroup.Group<TGroupKey, TAccountModel>, TGroupKey extends Serializable, TAccountModel extends Serializable> extends TreeSet<TGroup> implements Serializable {
 
 	/**
 	 * Generated Serial Version UID
 	 */
-	private static final long serialVersionUID = 5730718454629194108L;
+	private static final long serialVersionUID = 1L;
 
 	/*
 	 * Constructors
@@ -42,7 +42,7 @@ public abstract class AccountGroup<TGroup extends AccountGroup.Group<TGroupKey>,
 				group = this.createGroup(this.getKey(account));
 				this.add(group);
 			}
-			group.getItems().add(new AccountDetail(account));
+			group.getItems().add(this.createModel(account));
 		}
 	}
 
@@ -54,16 +54,18 @@ public abstract class AccountGroup<TGroup extends AccountGroup.Group<TGroupKey>,
 
 	protected abstract TGroup createGroup(TGroupKey key);
 
+	protected abstract TAccountModel createModel(Account account);
+
 	/*
 	 * Group Template
 	 */
 
-	public static class Group<TGroupKey extends Serializable> implements Serializable {
+	public static class Group<TGroupKey extends Serializable, TAccountModel extends Serializable> implements Serializable {
 
 		/**
 		 * Generated Serial Version UID
 		 */
-		private static final long serialVersionUID = 6396937449495710778L;
+		private static final long serialVersionUID = 1L;
 
 		/*
 		 * Fields
@@ -73,7 +75,7 @@ public abstract class AccountGroup<TGroup extends AccountGroup.Group<TGroupKey>,
 		protected TGroupKey key;
 
 		@JsonProperty("items")
-		protected List<AccountDetail> items;
+		protected List<TAccountModel> items;
 
 		/*
 		 * Constructor
@@ -81,7 +83,7 @@ public abstract class AccountGroup<TGroup extends AccountGroup.Group<TGroupKey>,
 
 		public Group(TGroupKey key) {
 			this.setKey(key);
-			this.items = new ArrayList<AccountDetail>();
+			this.items = new ArrayList<TAccountModel>();
 		}
 
 		/*
@@ -92,7 +94,7 @@ public abstract class AccountGroup<TGroup extends AccountGroup.Group<TGroupKey>,
 		@Override
 		public boolean equals(Object obj) {
 			if (this.getKey() != null && obj != null && obj instanceof Group) {
-				return this.getKey().equals(((Group<TGroupKey>) obj).getKey());
+				return this.getKey().equals(((Group<TGroupKey, TAccountModel>) obj).getKey());
 			}
 			return false;
 		}
@@ -109,10 +111,6 @@ public abstract class AccountGroup<TGroup extends AccountGroup.Group<TGroupKey>,
 		 * Properties
 		 */
 
-		public List<AccountDetail> getItems() {
-			return items;
-		}
-
 		public TGroupKey getKey() {
 			return key;
 		}
@@ -121,7 +119,11 @@ public abstract class AccountGroup<TGroup extends AccountGroup.Group<TGroupKey>,
 			this.key = key;
 		}
 
-		public void setItems(List<AccountDetail> items) {
+		public List<TAccountModel> getItems() {
+			return items;
+		}
+
+		public void setItems(List<TAccountModel> items) {
 			this.items = items;
 		}
 	}

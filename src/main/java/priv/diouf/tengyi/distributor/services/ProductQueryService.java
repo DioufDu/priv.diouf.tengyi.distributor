@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import priv.diouf.tengyi.distributor.persistence.models.product.Product;
 import priv.diouf.tengyi.distributor.persistence.repositories.product.ProductRepository;
+import priv.diouf.tengyi.distributor.services.criterias.account.AccountAdvancedSearchCriteria;
+import priv.diouf.tengyi.distributor.services.criterias.account.AccountBasicSearchCriteria;
 import priv.diouf.tengyi.distributor.services.exceptions.SpecifiedEntityNotFoundException;
-import priv.diouf.tengyi.distributor.services.models.AdvancedSearchCriteria;
-import priv.diouf.tengyi.distributor.services.models.BasicSearchCriteria;
 
 @Service
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
@@ -32,13 +32,13 @@ public class ProductQueryService {
 	 */
 
 	@Transactional(readOnly = true)
-	public Page<Product> findAll(AdvancedSearchCriteria criteria, PageRequest pageRequest) {
+	public Page<Product> findAll(AccountAdvancedSearchCriteria criteria, PageRequest pageRequest) {
 		// TODO
 		return null;// productRepository.query(criteria, pageRequest);
 	}
 
 	@Transactional(readOnly = true)
-	public Page<Product> findAll(BasicSearchCriteria criteria, PageRequest pageRequest) {
+	public Page<Product> findAll(AccountBasicSearchCriteria criteria, PageRequest pageRequest) {
 		// TODO
 		return null;// productRepository.query(criteria, pageRequest);
 	}

@@ -25,6 +25,8 @@ import priv.diouf.tengyi.distributor.persistence.repositories.photo.PhotoReposit
 import priv.diouf.tengyi.distributor.persistence.repositories.photo.StandardPhotoRepository;
 import priv.diouf.tengyi.distributor.persistence.repositories.photo.ThumbnailPhotoRepository;
 import priv.diouf.tengyi.distributor.persistence.repositories.product.ProductRepository;
+import priv.diouf.tengyi.distributor.web.models.requests.photo.PhotoGroupMergeRequest;
+import priv.diouf.tengyi.distributor.web.models.responses.photo.PhotoGroupDetail;
 import priv.diouf.tengyi.distributor.web.models.responses.photo.PhotoGroupInfo;
 
 @Service
@@ -58,29 +60,29 @@ public class PhotoMaintanceService {
 	 */
 
 	@Transactional
-	public void migratePhotos(@Valid @NotNull PhotoGroupInfo photoIds, @Valid @NotNull PhotoGroup photoGroup) {
+	public void migratePhotos(@Valid @NotNull PhotoGroupMergeRequest request, @Valid @NotNull PhotoGroup photoGroup) {
 		// - Original Photo
-		OriginalPhoto originalPhoto = originalPhotoRepository.findOne(photoIds.getOriginalPhotoId());
-		int angle = photoIds.getAngle() % 360;
+		OriginalPhoto originalPhoto = originalPhotoRepository.findOne(request.getOriginalPhotoId());
+		int angle = request.getAngle() % 360;
 		photoGroup.setOriginalPhoto(originalPhoto);
 		if (angle != 0) {
 			originalPhoto.setContent(ImageHelper.transferImage(originalPhoto, angle));
 		}
 		// - Thumbnail Photo
-		ThumbnailPhoto thumbnailPhoto = thumbnailPhotoRepository.findOne(photoIds.getThumbnailPhotoId());
+		ThumbnailPhoto thumbnailPhoto = thumbnailPhotoRepository.findOne(request.getThumbnailPhotoId());
 		photoGroup.setThumbnailPhoto(thumbnailPhoto);
 		if (angle != 0) {
 			thumbnailPhoto.setContent(ImageHelper.transferImage(thumbnailPhoto, angle));
 		}
 		// - Standard Photo
-		StandardPhoto standardPhoto = standardPhotoRepository.findOne(photoIds.getStandardPhotoId());
+		StandardPhoto standardPhoto = standardPhotoRepository.findOne(request.getStandardPhotoId());
 		if (angle != 0) {
 			standardPhoto.setContent(ImageHelper.transferImage(standardPhoto, angle));
 		}
 		photoGroup.setStandardPhoto(standardPhoto);
 
 		// - Full Screen Photo
-		FullScreenPhoto fullScreenPhoto = fullScreenPhotoRepository.findOne(photoIds.getFullScreenPhotoId());
+		FullScreenPhoto fullScreenPhoto = fullScreenPhotoRepository.findOne(request.getFullScreenPhotoId());
 		if (angle != 0) {
 			fullScreenPhoto.setContent(ImageHelper.transferImage(fullScreenPhoto, angle));
 		}
@@ -98,7 +100,7 @@ public class PhotoMaintanceService {
 		// Save
 		photoRepository.saveAndFlush(originalPhoto, thumbnailPhoto, standardPhoto, fullScreenPhoto);
 		// Collect Ids
-		PhotoGroupInfo photoIdCollection = new PhotoGroupInfo();
+		PhotoGroupDetail photoIdCollection = new PhotoGroupDetail();
 		photoIdCollection.setOriginalPhotoId(originalPhoto.getId());
 		photoIdCollection.setThumbnailPhotoId(thumbnailPhoto.getId());
 		photoIdCollection.setStandardPhotoId(standardPhoto.getId());

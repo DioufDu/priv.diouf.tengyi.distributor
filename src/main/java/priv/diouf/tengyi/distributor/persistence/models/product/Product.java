@@ -1,15 +1,15 @@
 package priv.diouf.tengyi.distributor.persistence.models.product;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -56,6 +56,7 @@ public class Product implements Serializable {
 	public String comment;
 
 	@Column(name = "STATUS", length = 16)
+	@Enumerated(EnumType.STRING)
 	public ProductStatus status;
 
 	/*
@@ -66,8 +67,8 @@ public class Product implements Serializable {
 	 * Navigations
 	 */
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "product")
-	protected List<ProductPhotoGroup> productPhotoGroups;
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = true)
+	protected ProductPhotoGroup productPhotoGroup;
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
 	@JoinColumn(name = "PRICING_MODEL_ID")
@@ -144,12 +145,12 @@ public class Product implements Serializable {
 		this.status = status;
 	}
 
-	public List<ProductPhotoGroup> getProductPhotoGroups() {
-		return productPhotoGroups;
+	public ProductPhotoGroup getProductPhotoGroup() {
+		return productPhotoGroup;
 	}
 
-	public void setProductPhotoGroups(List<ProductPhotoGroup> productPhotoGroups) {
-		this.productPhotoGroups = productPhotoGroups;
+	public void setProductPhotoGroup(ProductPhotoGroup productPhotoGroup) {
+		this.productPhotoGroup = productPhotoGroup;
 	}
 
 	public PricingModel getPricingModel() {

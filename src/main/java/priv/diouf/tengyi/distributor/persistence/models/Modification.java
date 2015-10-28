@@ -51,11 +51,11 @@ public class Modification implements Serializable {
 	 * Navigations
 	 */
 
-	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+	@ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.MERGE }, optional = true)
 	@JoinColumn(name = "CREATE_BY_ACCOUNT_ID")
 	protected Account createBy;
 
-	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+	@ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.MERGE }, optional = true)
 	@JoinColumn(name = "UPDATE_BY_ACCOUNT_ID")
 	protected Account updateBy;
 

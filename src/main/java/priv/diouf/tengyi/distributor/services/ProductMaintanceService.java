@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import priv.diouf.tengyi.distributor.persistence.models.product.Product;
 import priv.diouf.tengyi.distributor.persistence.repositories.product.ProductRepository;
-import priv.diouf.tengyi.distributor.web.models.requests.account.CreationRequest;
-import priv.diouf.tengyi.distributor.web.models.requests.account.UpdateRequest;
+import priv.diouf.tengyi.distributor.web.models.requests.account.AccountCreationRequest;
+import priv.diouf.tengyi.distributor.web.models.requests.account.AccountUpdateRequest;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
@@ -26,13 +26,13 @@ public class ProductMaintanceService {
 	 */
 
 	@Transactional
-	public Product create(CreationRequest request) {
+	public Product create(AccountCreationRequest request) {
 		// TODO
 		return null;
 	}
 
 	@Transactional
-	public Product update(long productId, UpdateRequest request) {
+	public Product update(long productId, AccountUpdateRequest request) {
 		// TODO
 		return null;
 	}
@@ -46,7 +46,7 @@ public class ProductMaintanceService {
 	 * Private & Protected Methods
 	 */
 
-	protected Product migrateScalarProperties(CreationRequest request, Product product) {
+	protected Product migrateScalarProperties(AccountCreationRequest request, Product product) {
 		// TODO
 		return null;
 	}

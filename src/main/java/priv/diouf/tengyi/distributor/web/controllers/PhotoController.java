@@ -90,7 +90,7 @@ public class PhotoController {
 		if (dishId < 1) {
 			return;
 		}
-		Photo photo = accountQueryService.findOneWithDetails(dishId).getAvatarPhotoGroup().getOriginalPhoto();
+		Photo photo = accountQueryService.findOneWithAllDetails(dishId).getAvatarPhotoGroup().getOriginalPhoto();
 		try {
 			ImageHelper.transferImage(new BufferedInputStream(new ByteArrayInputStream(photo.getContent())), photo.getType(), photo
 					.getPhotoFormat(), angle).toOutputStream(this.httpServletResponse.getOutputStream());
@@ -105,7 +105,7 @@ public class PhotoController {
 		if (dishId < 1) {
 			return;
 		}
-		Photo photo = accountQueryService.findOneWithDetails(dishId).getAvatarPhotoGroup().getOriginalPhoto();
+		Photo photo = accountQueryService.findOneWithAllDetails(dishId).getAvatarPhotoGroup().getOriginalPhoto();
 		try {
 			ImageHelper.transferImage(new BufferedInputStream(new ByteArrayInputStream(photo.getContent())), photoType, photo
 					.getPhotoFormat(), angle).toOutputStream(this.httpServletResponse.getOutputStream());

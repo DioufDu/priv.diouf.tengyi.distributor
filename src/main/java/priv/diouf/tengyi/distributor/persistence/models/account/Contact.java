@@ -64,6 +64,10 @@ public class Contact implements Serializable {
 
 	}
 
+	public Contact(Account account) {
+		this.setAccount(account);
+	}
+
 	/*
 	 * Properties
 	 */
