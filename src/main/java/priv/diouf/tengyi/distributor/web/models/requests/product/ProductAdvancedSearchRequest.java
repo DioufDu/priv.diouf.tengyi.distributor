@@ -1,9 +1,9 @@
 package priv.diouf.tengyi.distributor.web.models.requests.product;
 
-import priv.diouf.tengyi.distributor.services.criterias.account.AccountAdvancedSearchCriteria;
+import priv.diouf.tengyi.distributor.services.criterias.product.ProductAdvancedSearchCriteria;
 import priv.diouf.tengyi.distributor.web.models.requests.GeneralPageableRequest;
 
-public class ProductAdvancedSearchRequest extends GeneralPageableRequest<AccountAdvancedSearchCriteria> {
+public class ProductAdvancedSearchRequest extends GeneralPageableRequest<ProductAdvancedSearchCriteria> {
 
 	/*
 	 * Fields
@@ -14,9 +14,9 @@ public class ProductAdvancedSearchRequest extends GeneralPageableRequest<Account
 	 */
 
 	@Override
-	public AccountAdvancedSearchCriteria getCriteria() {
+	public ProductAdvancedSearchCriteria getCriteria() {
 		if (super.criteria == null) {
-			super.criteria = new AccountAdvancedSearchCriteria();
+			super.criteria = new ProductAdvancedSearchCriteria();
 		}
 		return super.getCriteria();
 	}

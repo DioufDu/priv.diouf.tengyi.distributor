@@ -40,7 +40,7 @@ public class ContactInfo implements Serializable {
 		}
 		this.setId(contact.getId());
 		this.setTelephone(contact.getTelephone());
-		this.setCellphone(contact.getCellphone());
+		this.setCellphone(contact.getMobile());
 		this.setAlternativePhone(contact.getAlternativePhone());
 		this.setFax(contact.getFax());
 		this.setEmail(contact.getEmail());

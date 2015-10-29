@@ -1,17 +1,18 @@
 package priv.diouf.tengyi.distributor.services;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import priv.diouf.tengyi.distributor.persistence.models.product.Product;
 import priv.diouf.tengyi.distributor.persistence.repositories.product.ProductRepository;
-import priv.diouf.tengyi.distributor.services.criterias.account.AccountAdvancedSearchCriteria;
-import priv.diouf.tengyi.distributor.services.criterias.account.AccountBasicSearchCriteria;
+import priv.diouf.tengyi.distributor.services.criterias.product.ProductAdvancedSearchCriteria;
+import priv.diouf.tengyi.distributor.services.criterias.product.ProductBasicSearchCriteria;
 import priv.diouf.tengyi.distributor.services.exceptions.SpecifiedEntityNotFoundException;
 
 @Service
@@ -31,35 +32,28 @@ public class ProductQueryService {
 	 * Queries
 	 */
 
-	@Transactional(readOnly = true)
-	public Page<Product> findAll(AccountAdvancedSearchCriteria criteria, PageRequest pageRequest) {
-		// TODO
-		return null;// productRepository.query(criteria, pageRequest);
+	public Map<String, Long> generateStatistics() {
+		return productRepository.generateStatistics();
 	}
 
-	@Transactional(readOnly = true)
-	public Page<Product> findAll(AccountBasicSearchCriteria criteria, PageRequest pageRequest) {
-		// TODO
-		return null;// productRepository.query(criteria, pageRequest);
-	}
-
-	@Transactional(readOnly = true)
-	public Page<Product> findAll(Pageable pageable) {
-		return productRepository.findAll(pageable);
-	}
-
-	@Transactional(readOnly = true)
-	public Product findOneWithDetails(Long id) {
-		if (id == null || id < 1) {
+	public Product findOneWithAllDetails(long id) {
+		if (id < 1) {
 			throw new SpecifiedEntityNotFoundException("product");
 		}
-		Product existedProduct = productRepository.findOne(id);
-		if (null == existedProduct) {
+		Product existedProduct = productRepository.findOneWithAllDetails(id);
+		if (existedProduct == null) {
 			throw new SpecifiedEntityNotFoundException("product");
 		}
 		return existedProduct;
 	}
 
+	public Page<Product> findAll(ProductBasicSearchCriteria criteria, PageRequest pageRequest) {
+		return productRepository.findAll(criteria, pageRequest);
+	}
+
+	public Page<Product> findAll(ProductAdvancedSearchCriteria criteria, PageRequest pageRequest) {
+		return productRepository.findAll(criteria, pageRequest);
+	}
 	/*
 	 * Private & Protected Methods
 	 */

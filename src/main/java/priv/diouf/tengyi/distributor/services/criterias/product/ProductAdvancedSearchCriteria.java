@@ -27,6 +27,10 @@ public class ProductAdvancedSearchCriteria implements Serializable {
 
 	public ProductStatus status;
 
+	public String createBy;
+
+	public String updateBy;
+
 	/*
 	 * Properties
 	 */
@@ -77,6 +81,22 @@ public class ProductAdvancedSearchCriteria implements Serializable {
 
 	public void setStatus(ProductStatus status) {
 		this.status = status;
+	}
+
+	public String getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(String createBy) {
+		this.createBy = createBy;
+	}
+
+	public String getUpdateBy() {
+		return updateBy;
+	}
+
+	public void setUpdateBy(String updateBy) {
+		this.updateBy = updateBy;
 	}
 
 }

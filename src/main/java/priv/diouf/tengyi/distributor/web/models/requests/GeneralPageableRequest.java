@@ -1,9 +1,13 @@
 package priv.diouf.tengyi.distributor.web.models.requests;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -38,7 +42,17 @@ public class GeneralPageableRequest<TCriteria> {
 
 	public PageRequest getPageRequest() {
 		if (pageRequest == null) {
-			pageRequest = new PageRequest(this.getIndex(), this.getSize());
+			if (!CollectionUtils.isEmpty(sorts)) {
+				Order[] orders = new Order[sorts.size()];
+				int idx = 0;
+				for (Entry<String, Direction> sort : sorts.entrySet()) {
+					orders[idx++] = new Order(sort.getValue() == null ? Direction.ASC : sort.getValue(), sort.getKey());
+				}
+				pageRequest = new PageRequest(this.getIndex(), this.getSize(), new Sort(orders));
+			} else {
+				pageRequest = new PageRequest(this.getIndex(), this.getSize());
+			}
+
 		}
 		return pageRequest;
 	}

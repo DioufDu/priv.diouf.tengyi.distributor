@@ -9,7 +9,6 @@ import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Fetch;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -96,7 +95,7 @@ public class AccountRepository extends GeneralJpaRepository<Account, Account_, L
 				if (criteria == null || StringUtils.isBlank(criteria.getKeyword())) {
 					return null;
 				}
-				return cb.and(generateFuzzyPredicates(cb,
+				return cb.or(generateFuzzyPredicates(cb,
 						// keywords
 						criteria.getKeyword(),
 						// Fields - Scalar Fields
@@ -104,7 +103,7 @@ public class AccountRepository extends GeneralJpaRepository<Account, Account_, L
 						// Fields - Address
 						root.get(Account_.address).get(Address_.overall),
 						// Fields - Contact
-						root.get(Account_.contact).get(Contact_.cellphone), root.get(Account_.contact).get(Contact_.telephone), root.get(
+						root.get(Account_.contact).get(Contact_.mobile), root.get(Account_.contact).get(Contact_.telephone), root.get(
 								Account_.contact).get(Contact_.fax), root.get(Account_.contact).get(Contact_.email), root.get(
 										Account_.contact).get(Contact_.alternativePhone)));
 			}
@@ -117,8 +116,30 @@ public class AccountRepository extends GeneralJpaRepository<Account, Account_, L
 			@Override
 			public Predicate toPredicate(Root<Account> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				fetchInfoNode(root);
-				// TODO
-				return null;
+				return cb.or(
+						// Name
+						cb.like(root.get(Account_.name), String.format("%%s%", criteria.getName())),
+						// Login Id
+						cb.like(root.get(Account_.loginId), String.format("%%s%", criteria.getLoginId())),
+						// Title
+						cb.like(root.get(Account_.title), String.format("%%s%", criteria.getTitle())),
+						// Status
+						cb.equal(root.get(Account_.status), criteria.getStatus()),
+						// Type
+						cb.equal(root.get(Account_.type), criteria.getType()),
+						// Address - overall
+						cb.like(root.get(Account_.address).get(Address_.overall), String.format("%%s%", criteria.getAddressOverall())),
+						// Contact - mobile
+						cb.like(root.get(Account_.contact).get(Contact_.mobile), String.format("%%s%", criteria.getContactPhone())),
+						// Contact - telephone
+						cb.like(root.get(Account_.contact).get(Contact_.telephone), String.format("%%s%", criteria.getContactPhone())),
+						// Contact - fax
+						cb.like(root.get(Account_.contact).get(Contact_.fax), String.format("%%s%", criteria.getContactPhone())),
+						// Contact - alternativePhone
+						cb.like(root.get(Account_.contact).get(Contact_.alternativePhone), String.format("%%s%", criteria
+								.getContactPhone())),
+						// Contact
+						cb.like(root.get(Account_.contact).get(Contact_.email), String.format("%%s%", criteria.getContactEmail())));
 			}
 		}, pageRequest);
 	}
@@ -139,17 +160,5 @@ public class AccountRepository extends GeneralJpaRepository<Account, Account_, L
 		Fetch<Account, Modification> fetchModification = root.fetch(Account_.modification);
 		fetchModification.fetch(Modification_.createBy);
 		fetchModification.fetch(Modification_.updateBy);
-	}
-
-	@SafeVarargs
-	private final Predicate[] generateFuzzyPredicates(CriteriaBuilder cb, String keyword, Path<String>... fields) {
-		if (fields == null || fields.length == 0 || StringUtils.isBlank(keyword)) {
-			return new Predicate[1];
-		}
-		Predicate[] fuzzyPredicates = new Predicate[fields.length];
-		for (int idx = 0; idx < fields.length; idx++) {
-			fuzzyPredicates[idx] = cb.like(fields[idx], String.format("%%s%", keyword));
-		}
-		return fuzzyPredicates;
 	}
 }

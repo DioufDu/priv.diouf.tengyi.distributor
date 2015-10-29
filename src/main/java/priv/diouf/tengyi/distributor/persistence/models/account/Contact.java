@@ -37,8 +37,8 @@ public class Contact implements Serializable {
 	@Column(name = "TELEPHONE", length = 32)
 	protected String telephone;
 
-	@Column(name = "CELLPHONE", length = 32)
-	protected String cellphone;
+	@Column(name = "MOBILE", length = 32)
+	protected String mobile;
 
 	@Column(name = "ALTERNATIVE_PHONE", length = 32)
 	protected String alternativePhone;
@@ -88,12 +88,12 @@ public class Contact implements Serializable {
 		this.telephone = telephone;
 	}
 
-	public String getCellphone() {
-		return cellphone;
+	public String getMobile() {
+		return mobile;
 	}
 
-	public void setCellphone(String cellphone) {
-		this.cellphone = cellphone;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 	public String getAlternativePhone() {

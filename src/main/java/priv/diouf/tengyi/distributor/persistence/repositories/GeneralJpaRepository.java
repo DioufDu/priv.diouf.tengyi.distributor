@@ -16,10 +16,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.SingularAttribute;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -33,8 +35,7 @@ import priv.diouf.tengyi.distributor.persistence.exceptions.CommonPersistenceExc
 
 @Transactional
 @NoRepositoryBean
-public abstract class GeneralJpaRepository<TEntity, TEntity_, TId extends Serializable> extends
-SimpleJpaRepository<TEntity, TId> {
+public abstract class GeneralJpaRepository<TEntity, TEntity_, TId extends Serializable> extends SimpleJpaRepository<TEntity, TId> {
 
 	/*
 	 * Fields
@@ -96,34 +97,15 @@ SimpleJpaRepository<TEntity, TId> {
 	 * Enhancements to JPA Repository
 	 */
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.sap.moremobile.management.persistence.repositories.interfaces.GeneralJpaRepository#findAll(org.springframework.data.jpa.domain
-	 * .Specification, org.springframework.data.domain.Sort, org.springframework.data.domain.Pageable)
-	 */
 	public Page<TEntity> findAll(Specification<TEntity> spec, Sort sort, Pageable pageable) {
 		TypedQuery<TEntity> query = getQuery(spec, pageable);
-		return pageable == null ? new PageImpl<TEntity>(getQuery(spec, sort).getResultList()) : readPage(query,
-				pageable, spec);
+		return pageable == null ? new PageImpl<TEntity>(getQuery(spec, sort).getResultList()) : readPage(query, pageable, spec);
 	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.sap.moremobile.management.persistence.repositories.interfaces.GeneralJpaRepository#save(java.lang.Object[])
-	 */
 
 	@SuppressWarnings("unchecked")
 	public List<TEntity> save(TEntity... entities) {
 		return this.save(Arrays.asList(entities));
 	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.sap.moremobile.management.persistence.repositories.interfaces.GeneralJpaRepository#saveAndFlush(java.lang.Object[])
-	 */
 
 	@SuppressWarnings("unchecked")
 	public List<TEntity> saveAndFlush(TEntity... entities) {
@@ -132,43 +114,19 @@ SimpleJpaRepository<TEntity, TId> {
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.sap.moremobile.management.persistence.repositories.interfaces.GeneralJpaRepository#saveAndFlush(java.lang.Iterable)
-	 */
-
 	public List<TEntity> saveAndFlush(Iterable<TEntity> entities) {
 		List<TEntity> result = this.save(entities);
 		this.flush();
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.sap.moremobile.management.persistence.repositories.interfaces.GeneralJpaRepository#refresh(java.io.Serializable)
-	 */
-
 	public void refresh(TId id) {
 		sharedEntityManager.refresh(super.findOne(id));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.sap.moremobile.management.persistence.repositories.interfaces.GeneralJpaRepository#refresh(java.lang.Object)
-	 */
-
 	public void refresh(TEntity t) {
 		sharedEntityManager.refresh(t);
 	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.sap.moremobile.management.persistence.repositories.interfaces.GeneralJpaRepository#refresh(java.io.Serializable[])
-	 */
 
 	@SuppressWarnings("unchecked")
 	public void refresh(TId... ids) {
@@ -176,12 +134,6 @@ SimpleJpaRepository<TEntity, TId> {
 			refresh(id);
 		}
 	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.sap.moremobile.management.persistence.repositories.interfaces.GeneralJpaRepository#refresh(java.lang.Object[])
-	 */
 
 	@SuppressWarnings("unchecked")
 	public void refresh(TEntity... entities) {
@@ -193,6 +145,33 @@ SimpleJpaRepository<TEntity, TId> {
 	/*
 	 * Private & Protected Methods
 	 */
+
+	@SafeVarargs
+	protected final Predicate[] generateFuzzyPredicates(CriteriaBuilder cb, String keyword, Path<String>... fields) {
+		if (fields == null || fields.length == 0 || StringUtils.isBlank(keyword)) {
+			return new Predicate[1];
+		}
+		Predicate[] fuzzyPredicates = new Predicate[fields.length];
+		for (int idx = 0; idx < fields.length; idx++) {
+			fuzzyPredicates[idx] = cb.like(fields[idx], String.format("%%s%", keyword));
+		}
+		return fuzzyPredicates;
+	}
+
+	protected final Predicate[] generateFuzzyPredicates(FuzzyPredicatesPromise... predicatesPromises) {
+		if (predicatesPromises == null || predicatesPromises.length == 0) {
+			return new Predicate[1];
+		}
+		Predicate[] fuzzyPredicates = new Predicate[predicatesPromises.length];
+		for (int idx = 0; idx < predicatesPromises.length; idx++) {
+			FuzzyPredicatesPromise predicatesPromise = predicatesPromises[idx];
+			if (predicatesPromise == null || !predicatesPromise.isValid()) {
+				continue;
+			}
+			fuzzyPredicates[idx] = predicatesPromise.generate();
+		}
+		return fuzzyPredicates;
+	}
 
 	@SuppressWarnings("unchecked")
 	protected Class<TEntity> getEntityType() {
@@ -223,25 +202,20 @@ SimpleJpaRepository<TEntity, TId> {
 			// TODO: Refactor with perfect lock
 			synchronized (this) {
 				Field[] canonicalMetadataFields = this.getCanonicalMetadataType().getDeclaredFields();
-				this.canonicalMetamodelFields = new ArrayList<SingularAttribute<TEntity, String>>(
-						canonicalMetadataFields.length);
+				this.canonicalMetamodelFields = new ArrayList<SingularAttribute<TEntity, String>>(canonicalMetadataFields.length);
 				for (Field canonicalModelfield : canonicalMetadataFields) {
-					if (Modifier.isStatic(canonicalModelfield.getModifiers())
-							&& Modifier.isPublic(canonicalModelfield.getModifiers())
-							&& Modifier.isVolatile(canonicalModelfield.getModifiers())
-							&& canonicalModelfield.getType().isAssignableFrom(SingularAttribute.class)) {
+					if (Modifier.isStatic(canonicalModelfield.getModifiers()) && Modifier.isPublic(canonicalModelfield.getModifiers())
+							&& Modifier.isVolatile(canonicalModelfield.getModifiers()) && canonicalModelfield.getType().isAssignableFrom(
+									SingularAttribute.class)) {
 						try {
 							// Try search the field with same name in entity type
 							Field entityField = this.getEntityType().getDeclaredField(canonicalModelfield.getName());
 							if (searchableTypes == null || searchableTypes.isEmpty()) {
-								canonicalMetamodelFields.add((SingularAttribute<TEntity, String>) (canonicalModelfield
-										.get(null)));
+								canonicalMetamodelFields.add((SingularAttribute<TEntity, String>) (canonicalModelfield.get(null)));
 							} else {
 								for (Class<?> searchableType : getSearchableTypes()) {
 									if (searchableType.isAssignableFrom(entityField.getType())) {
-										canonicalMetamodelFields
-												.add((SingularAttribute<TEntity, String>) (canonicalModelfield
-														.get(null)));
+										canonicalMetamodelFields.add((SingularAttribute<TEntity, String>) (canonicalModelfield.get(null)));
 									}
 								}
 							}
@@ -252,8 +226,7 @@ SimpleJpaRepository<TEntity, TId> {
 						} catch (ClassCastException ex) {
 							continue;
 						} catch (IllegalArgumentException | IllegalAccessException ex) {
-							throw new CommonPersistenceException(
-									"Invalid canonical metamodel for basic query, please check it.", ex);
+							throw new CommonPersistenceException("Invalid canonical metamodel for basic query, please check it.", ex);
 						}
 					}
 				}
@@ -278,8 +251,7 @@ SimpleJpaRepository<TEntity, TId> {
 		// TODO: Refactor with perfect lock
 		if (this.genericTypes == null) {
 			synchronized (this) {
-				this.genericTypes = ((ParameterizedType) this.getClass().getGenericSuperclass())
-						.getActualTypeArguments();
+				this.genericTypes = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
 			}
 		}
 		return this.genericTypes;

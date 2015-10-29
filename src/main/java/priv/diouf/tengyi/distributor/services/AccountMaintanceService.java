@@ -133,7 +133,7 @@ public class AccountMaintanceService {
 		contact.setEmail(request.getEmail());
 		contact.setFax(request.getFax());
 		contact.setTelephone(request.getTelephone());
-		contact.setCellphone(request.getCellphone());
+		contact.setMobile(request.getCellphone());
 		contact.setAlternativePhone(request.getAlternativePhone());
 		// Return
 		return contact;

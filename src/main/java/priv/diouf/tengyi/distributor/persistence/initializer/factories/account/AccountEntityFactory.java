@@ -132,7 +132,7 @@ public class AccountEntityFactory extends GeneralEntityFactory<Account> implemen
 		contact.setEmail(String.format("%s@163.com", RandomStringUtils.randomAlphabetic(RandomUtils.nextInt(5, 10))));
 		contact.setFax(String.valueOf(RandomUtils.nextLong(10000000, 90000000)));
 		contact.setTelephone(String.valueOf(RandomUtils.nextLong(10000000, 90000000)));
-		contact.setCellphone(String.valueOf(RandomUtils.nextLong(13000000000L, 19000000000L)));
+		contact.setMobile(String.valueOf(RandomUtils.nextLong(13000000000L, 19000000000L)));
 		if (RandomUtils.nextInt(1, 3) == 2) {
 			contact.setAlternativePhone(String.valueOf(RandomUtils.nextLong(13000000000L, 19000000000L)));
 		}
