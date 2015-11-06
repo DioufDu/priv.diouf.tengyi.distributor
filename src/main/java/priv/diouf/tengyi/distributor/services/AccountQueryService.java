@@ -57,6 +57,14 @@ public class AccountQueryService {
 	}
 
 	/*
+	 * Others
+	 */
+
+	public Account findOneByToken(String token) {
+		return accountRepository.findOneByToken(token);
+	}
+
+	/*
 	 * Private & Protected Methods
 	 */
 }

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import priv.diouf.tengyi.distributor.services.AccountMaintanceService;
-import priv.diouf.tengyi.distributor.web.annontations.AuthenticatedRole;
 import priv.diouf.tengyi.distributor.web.models.requests.account.AccountCreationRequest;
 import priv.diouf.tengyi.distributor.web.models.requests.account.AccountUpdateRequest;
 import priv.diouf.tengyi.distributor.web.models.responses.account.AccountDetail;
@@ -27,7 +26,6 @@ public class AccountMaintanceController extends GeneralController {
 	 * Create
 	 */
 
-	@AuthenticatedRole("Admin")
 	@RequestMapping(value = "account", method = RequestMethod.POST)
 	public AccountDetail createAccount(@RequestBody(required = true) AccountCreationRequest request) {
 		return new AccountDetail(accountMaintanceService.create(request));
@@ -37,7 +35,6 @@ public class AccountMaintanceController extends GeneralController {
 	 * Update
 	 */
 
-	@AuthenticatedRole("Admin")
 	@RequestMapping(value = "account/{accountId}", method = RequestMethod.PUT)
 	public AccountDetail modifyAccount(@RequestBody(required = true) AccountUpdateRequest request,
 			@PathVariable("accountId") long accountId) {
@@ -48,7 +45,6 @@ public class AccountMaintanceController extends GeneralController {
 	 * Delete
 	 */
 
-	@AuthenticatedRole("Admin")
 	@RequestMapping(value = "account/{accountId}", method = RequestMethod.DELETE)
 	public void deleteAccount(@PathVariable("accountId") long accountId) {
 		accountMaintanceService.delete(accountId);

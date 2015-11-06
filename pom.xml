@@ -18,8 +18,14 @@
 		<org.springframework.security.version>4.0.2.RELEASE</org.springframework.security.version>
 		<org.hibernate.version>5.0.2.Final</org.hibernate.version>
 		<com.fasterxml.jackson.version>2.6.3</com.fasterxml.jackson.version>
+		<sap.cloud.sdk.version>2.34.8</sap.cloud.sdk.version>
 	</properties>
 	<dependencies>
+		<!-- Neo SDK -->
+		<!-- <dependency> <groupId>com.sap.cloud</groupId> <artifactId>neo-java-web-api</artifactId> <version>${sap.cloud.sdk.version}</version> 
+			<scope>provided</scope> <exclusions> <exclusion> <groupId>org.apache.chemistry.opencmis</groupId> <artifactId>chemistry-opencmis-client-api</artifactId> 
+			</exclusion> <exclusion> <groupId>org.apache.chemistry.opencmis</groupId> <artifactId>chemistry-opencmis-commons-api</artifactId> 
+			</exclusion> </exclusions> </dependency> -->
 		<!-- Tomcat -->
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
@@ -106,6 +112,11 @@
 			<groupId>net.coobird</groupId>
 			<artifactId>thumbnailator</artifactId>
 			<version>0.4.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>2.3</version>
 		</dependency>
 	</dependencies>
 	<build>

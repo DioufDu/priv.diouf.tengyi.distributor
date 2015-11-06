@@ -1,5 +1,9 @@
 package priv.diouf.tengyi.distributor.web.controllers;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,9 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import priv.diouf.tengyi.distributor.common.auxiliaries.ImageHelper;
+import priv.diouf.tengyi.distributor.common.models.enums.PhotoType;
 import priv.diouf.tengyi.distributor.persistence.models.account.Account;
+import priv.diouf.tengyi.distributor.persistence.models.photo.Photo;
 import priv.diouf.tengyi.distributor.services.AccountQueryService;
-import priv.diouf.tengyi.distributor.web.annontations.AuthenticatedRole;
+import priv.diouf.tengyi.distributor.services.exceptions.InvalidPhotoFormatException;
 import priv.diouf.tengyi.distributor.web.models.requests.account.AccountAdvancedSearchRequest;
 import priv.diouf.tengyi.distributor.web.models.requests.account.AccountBasicSearchRequest;
 import priv.diouf.tengyi.distributor.web.models.responses.account.AccountDetail;
@@ -55,16 +62,53 @@ public class AccountQueryController extends GeneralController {
 	 * Retrieve Actions - Search & Page
 	 */
 
-	@AuthenticatedRole("Admin")
 	@RequestMapping(value = "account/search/basic", method = RequestMethod.POST)
 	public AccountPage<AccountInfo> basicSearch(@RequestBody AccountBasicSearchRequest queryRequest) {
 		return this.generateAccountPage(accountQueryService.findAll(queryRequest.getCriteria(), queryRequest.getPageRequest()));
 	}
 
-	@AuthenticatedRole("Admin")
 	@RequestMapping(value = "account/search/advanced", method = RequestMethod.POST)
 	public AccountPage<AccountInfo> advancedSearch(@RequestBody AccountAdvancedSearchRequest queryRequest) {
 		return this.generateAccountPage(accountQueryService.findAll(queryRequest.getCriteria(), queryRequest.getPageRequest()));
+	}
+
+	/*
+	 * Retrieve Actions - Account Avatar
+	 */
+
+	@RequestMapping(value = "account/{accountId}/avatar/rotate/{angle}", method = RequestMethod.GET)
+	public void getDishPhoto(@PathVariable("accountId") long accountId, @PathVariable("angle") int angle) {
+		if (accountId < 1) {
+			return;
+		}
+		Photo photo = accountQueryService.findOneWithAllDetails(accountId).getAvatarPhotoGroup().getOriginalPhoto();
+		try {
+			ImageHelper.transferImage(
+					// Image Stream
+					new BufferedInputStream(new ByteArrayInputStream(photo.getContent())), photo.getType(), photo.getPhotoFormat(), angle)
+					// Response
+					.toOutputStream(this.getHttpServletResponse().getOutputStream());
+		} catch (IOException ex) {
+			throw new InvalidPhotoFormatException();
+		}
+	}
+
+	@RequestMapping(value = "account/{accountId}/avatar/{photoType}/rotate/{angle}", method = RequestMethod.GET)
+	public void getDishPhoto(@PathVariable("accountId") long accountId, @PathVariable("photoType") PhotoType photoType,
+			@PathVariable("angle") int angle) {
+		if (accountId < 1) {
+			return;
+		}
+		Photo photo = accountQueryService.findOneWithAllDetails(accountId).getAvatarPhotoGroup().getOriginalPhoto();
+		try {
+			ImageHelper.transferImage(
+					// Image Stream
+					new BufferedInputStream(new ByteArrayInputStream(photo.getContent())), photoType, photo.getPhotoFormat(), angle)
+					// Response
+					.toOutputStream(this.getHttpServletResponse().getOutputStream());
+		} catch (IOException ex) {
+			throw new InvalidPhotoFormatException();
+		}
 	}
 
 	/*

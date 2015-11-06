@@ -144,6 +144,29 @@ public class AccountRepository extends GeneralJpaRepository<Account, Account_, L
 		}, pageRequest);
 	}
 
+	@Transactional(readOnly = true)
+	public Account findOneByToken(final String token) {
+		return super.findOne(new Specification<Account>() {
+			@Override
+			public Predicate toPredicate(Root<Account> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				fetchInfoNode(root);
+				return
+				// Token Check Up
+				cb.or(
+						// Login Id
+						cb.equal(root.get(Account_.loginId), token),
+						// Name
+						cb.equal(root.get(Account_.name), token),
+						// Contact - Telephone
+						cb.equal(root.get(Account_.contact).get(Contact_.telephone), token),
+						// Contact - Mobile
+						cb.equal(root.get(Account_.contact).get(Contact_.mobile), token),
+						// Contact - Email
+						cb.equal(root.get(Account_.contact).get(Contact_.email), token));
+			}
+		});
+	}
+
 	/*
 	 * Private & Protected Methods
 	 */
@@ -161,4 +184,5 @@ public class AccountRepository extends GeneralJpaRepository<Account, Account_, L
 		fetchModification.fetch(Modification_.createBy);
 		fetchModification.fetch(Modification_.updateBy);
 	}
+
 }

@@ -43,7 +43,7 @@ public class PricingModelInfo implements Serializable {
 		this.setFactoryPrice(pricingModel.getFactoryPrice());
 		this.setUnifiedPrice(pricingModel.getUnifiedPrice());
 		this.setStorePrice(pricingModel.getStorePrice());
-		this.setTerminalPice(pricingModel.getTerminalPice());
+		this.setTerminalPice(pricingModel.getTerminalPrice());
 		this.setStrategy(pricingModel.getStrategy());
 		// Navigations
 	}

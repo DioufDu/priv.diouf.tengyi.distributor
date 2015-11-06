@@ -45,8 +45,8 @@ public class PricingModel implements Serializable {
 	@Column(name = "STORE_PRICE", length = 32, precision = 32, scale = 20)
 	public BigDecimal storePrice;
 
-	@Column(name = "TERMINAL_PICE", length = 32, precision = 32, scale = 20)
-	public BigDecimal terminalPice;
+	@Column(name = "TERMINAL_PRICE", length = 32, precision = 32, scale = 20)
+	public BigDecimal terminalPrice;
 
 	@Column(name = "PRICE_STRATEGY", length = 32, precision = 32, scale = 20)
 	public PriceStrategy strategy;
@@ -111,12 +111,12 @@ public class PricingModel implements Serializable {
 		this.storePrice = storePrice;
 	}
 
-	public BigDecimal getTerminalPice() {
-		return terminalPice;
+	public BigDecimal getTerminalPrice() {
+		return terminalPrice;
 	}
 
-	public void setTerminalPice(BigDecimal terminalPice) {
-		this.terminalPice = terminalPice;
+	public void setTerminalPrice(BigDecimal terminalPrice) {
+		this.terminalPrice = terminalPrice;
 	}
 
 	public PriceStrategy getStrategy() {

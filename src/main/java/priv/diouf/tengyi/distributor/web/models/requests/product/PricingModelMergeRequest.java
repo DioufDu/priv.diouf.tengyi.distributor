@@ -1,6 +1,9 @@
 package priv.diouf.tengyi.distributor.web.models.requests.product;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+
+import priv.diouf.tengyi.distributor.common.models.enums.PriceStrategy;
 
 public class PricingModelMergeRequest implements Serializable {
 
@@ -13,23 +16,19 @@ public class PricingModelMergeRequest implements Serializable {
 	 * Fields
 	 */
 
-	protected long id;
-
 	/*
 	 * Scalar Fields
 	 */
 
-	protected String overall;
+	public BigDecimal factoryPrice;
 
-	protected String country;
+	public BigDecimal unifiedPrice;
 
-	protected String province;
+	public BigDecimal storePrice;
 
-	protected String city;
+	public BigDecimal terminalPrice;
 
-	protected String zone;
-
-	protected String zip;
+	public PriceStrategy strategy;
 
 	/*
 	 * Navigations
@@ -46,60 +45,44 @@ public class PricingModelMergeRequest implements Serializable {
 	 * Properties
 	 */
 
-	public long getId() {
-		return id;
+	public BigDecimal getFactoryPrice() {
+		return factoryPrice;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setFactoryPrice(BigDecimal factoryPrice) {
+		this.factoryPrice = factoryPrice;
 	}
 
-	public String getOverall() {
-		return overall;
+	public BigDecimal getUnifiedPrice() {
+		return unifiedPrice;
 	}
 
-	public void setOverall(String overall) {
-		this.overall = overall;
+	public void setUnifiedPrice(BigDecimal unifiedPrice) {
+		this.unifiedPrice = unifiedPrice;
 	}
 
-	public String getCountry() {
-		return country;
+	public BigDecimal getStorePrice() {
+		return storePrice;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
+	public void setStorePrice(BigDecimal storePrice) {
+		this.storePrice = storePrice;
 	}
 
-	public String getProvince() {
-		return province;
+	public BigDecimal getTerminalPrice() {
+		return terminalPrice;
 	}
 
-	public void setProvince(String province) {
-		this.province = province;
+	public void setTerminalPrice(BigDecimal terminalPice) {
+		this.terminalPrice = terminalPice;
 	}
 
-	public String getCity() {
-		return city;
+	public PriceStrategy getStrategy() {
+		return strategy;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getZone() {
-		return zone;
-	}
-
-	public void setZone(String zone) {
-		this.zone = zone;
-	}
-
-	public String getZip() {
-		return zip;
-	}
-
-	public void setZip(String zip) {
-		this.zip = zip;
+	public void setStrategy(PriceStrategy strategy) {
+		this.strategy = strategy;
 	}
 
 }

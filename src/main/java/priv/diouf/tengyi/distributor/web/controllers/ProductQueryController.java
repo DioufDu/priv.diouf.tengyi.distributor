@@ -1,6 +1,7 @@
 package priv.diouf.tengyi.distributor.web.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import priv.diouf.tengyi.distributor.persistence.models.account.Account;
 import priv.diouf.tengyi.distributor.persistence.models.product.Product;
 import priv.diouf.tengyi.distributor.services.ProductQueryService;
-import priv.diouf.tengyi.distributor.web.annontations.AuthenticatedRole;
 import priv.diouf.tengyi.distributor.web.models.requests.product.ProductAdvancedSearchRequest;
 import priv.diouf.tengyi.distributor.web.models.requests.product.ProductBasicSearchRequest;
 import priv.diouf.tengyi.distributor.web.models.responses.product.ProductDetail;
@@ -29,6 +30,10 @@ public class ProductQueryController extends GeneralController {
 	@Autowired
 	protected ProductQueryService productQueryService;
 
+	@Autowired(required = false)
+	@Qualifier("loginUser")
+	protected Account loginUser;
+
 	/*
 	 * Retrieve Actions
 	 */
@@ -39,6 +44,11 @@ public class ProductQueryController extends GeneralController {
 
 	@RequestMapping(value = "product", method = RequestMethod.GET)
 	public ProductStatistics generateStatistics() {
+		return new ProductStatistics(productQueryService.generateStatistics());
+	}
+
+	@RequestMapping(value = "product/login", method = RequestMethod.GET)
+	public ProductStatistics testGetUser() {
 		return new ProductStatistics(productQueryService.generateStatistics());
 	}
 
@@ -55,13 +65,11 @@ public class ProductQueryController extends GeneralController {
 	 * Retrieve Actions - Search & Page
 	 */
 
-	@AuthenticatedRole("Admin")
 	@RequestMapping(value = "product/search/basic", method = RequestMethod.POST)
 	public ProductPage<ProductInfo> basicSearch(@RequestBody ProductBasicSearchRequest queryRequest) {
 		return this.generateProductPage(productQueryService.findAll(queryRequest.getCriteria(), queryRequest.getPageRequest()));
 	}
 
-	@AuthenticatedRole("Admin")
 	@RequestMapping(value = "product/search/advanced", method = RequestMethod.POST)
 	public ProductPage<ProductInfo> advancedSearch(@RequestBody ProductAdvancedSearchRequest queryRequest) {
 		return this.generateProductPage(productQueryService.findAll(queryRequest.getCriteria(), queryRequest.getPageRequest()));

@@ -119,7 +119,7 @@ public class ProductEntityFactory extends GeneralEntityFactory<Product> implemen
 		pricingModel.setFactoryPrice(factoryPrice);
 		pricingModel.setUnifiedPrice(factoryPrice.multiply(new BigDecimal(3.5)));
 		pricingModel.setStorePrice(factoryPrice.multiply(new BigDecimal(3.5).multiply(new BigDecimal(0.4))));
-		pricingModel.setTerminalPice(factoryPrice.multiply(new BigDecimal(3.5).multiply(new BigDecimal(0.6))));
+		pricingModel.setTerminalPrice(factoryPrice.multiply(new BigDecimal(3.5).multiply(new BigDecimal(0.6))));
 		// Return
 		return pricingModel;
 	}

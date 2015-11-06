@@ -1,5 +1,6 @@
 package priv.diouf.tengyi.distributor.web.controllers;
 
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import priv.diouf.tengyi.distributor.persistence.initializer.DataInitializerHolder;
-import priv.diouf.tengyi.distributor.web.annontations.AuthenticatedRole;
 
 @RestController
 public class AdminController {
@@ -27,7 +27,7 @@ public class AdminController {
 	 * Photo Actions
 	 */
 
-	@AuthenticatedRole("Admin")
+	@RolesAllowed("")
 	@RequestMapping(value = "admin/initial", method = RequestMethod.GET)
 	public void initialTestData() {
 		dataInitializerHolder.execute();

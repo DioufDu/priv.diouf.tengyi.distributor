@@ -85,35 +85,6 @@ public class PhotoController {
 		}
 	}
 
-	@RequestMapping(value = "dish/{dishId}/photo/rotate/{angle}", method = RequestMethod.GET)
-	public void getDishPhoto(@PathVariable("dishId") long dishId, @PathVariable("angle") int angle) {
-		if (dishId < 1) {
-			return;
-		}
-		Photo photo = accountQueryService.findOneWithAllDetails(dishId).getAvatarPhotoGroup().getOriginalPhoto();
-		try {
-			ImageHelper.transferImage(new BufferedInputStream(new ByteArrayInputStream(photo.getContent())), photo.getType(), photo
-					.getPhotoFormat(), angle).toOutputStream(this.httpServletResponse.getOutputStream());
-		} catch (IOException ex) {
-			throw new InvalidPhotoFormatException();
-		}
-	}
-
-	@RequestMapping(value = "dish/{dishId}/photo/{photoType}/rotate/{angle}", method = RequestMethod.GET)
-	public void getDishPhoto(@PathVariable("dishId") long dishId, @PathVariable("photoType") PhotoType photoType,
-			@PathVariable("angle") int angle) {
-		if (dishId < 1) {
-			return;
-		}
-		Photo photo = accountQueryService.findOneWithAllDetails(dishId).getAvatarPhotoGroup().getOriginalPhoto();
-		try {
-			ImageHelper.transferImage(new BufferedInputStream(new ByteArrayInputStream(photo.getContent())), photoType, photo
-					.getPhotoFormat(), angle).toOutputStream(this.httpServletResponse.getOutputStream());
-		} catch (IOException ex) {
-			throw new InvalidPhotoFormatException();
-		}
-	}
-
 	@RequestMapping(value = "photo", method = RequestMethod.POST)
 	public PhotoGroupInfo upload(@RequestParam(value = "photo", required = true) MultipartFile file) throws IOException {
 		PhotoFormat photoFormat = ImageHelper.identify(file);
@@ -122,14 +93,6 @@ public class PhotoController {
 					PhotoType.ORIGINAL, 0), photoFormat), photoFormat);
 		}
 		throw new InvalidPhotoFormatException();
-	}
-
-	@RequestMapping(value = "photo/encode", method = RequestMethod.POST)
-	public String encode(@RequestParam(value = "photo", required = true) MultipartFile file,
-			@RequestParam(value = "type", defaultValue = "STANDARD", required = false) PhotoType photoType,
-			@RequestParam(value = "angle", required = false) int angle) throws IOException {
-		PhotoFormat photoFormat = ImageHelper.identify(file);
-		return ImageHelper.encodeImageAsString(ImageHelper.transferImage(file, photoFormat, photoType, angle), photoFormat);
 	}
 
 	/*

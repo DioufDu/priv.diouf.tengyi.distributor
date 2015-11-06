@@ -10,8 +10,8 @@ import priv.diouf.tengyi.distributor.common.models.enums.PriceStrategy;
 @StaticMetamodel(PricingModel.class)
 public abstract class PricingModel_ {
 
-	public static volatile SingularAttribute<PricingModel, BigDecimal> terminalPice;
 	public static volatile SingularAttribute<PricingModel, Product> product;
+	public static volatile SingularAttribute<PricingModel, BigDecimal> terminalPrice;
 	public static volatile SingularAttribute<PricingModel, BigDecimal> factoryPrice;
 	public static volatile SingularAttribute<PricingModel, BigDecimal> storePrice;
 	public static volatile SingularAttribute<PricingModel, Long> id;
